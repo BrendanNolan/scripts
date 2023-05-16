@@ -1,0 +1,7 @@
+#! /usr/bin/bash
+
+# Usage: <script> <.txt file to which to save session>
+# Exampe usage: <script> ~/my-fave-tmux-session.txt
+
+cp `readlink -f ~/.local/share/tmux/resurrect/last` $1
+
