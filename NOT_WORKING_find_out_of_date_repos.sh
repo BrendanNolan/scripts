@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Check if input directory exists
 if [ ! -d "$1" ]; then
