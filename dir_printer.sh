@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 dirs=$(find . -maxdepth 1 -type d -not -path '*/\.*' -not -path '.')
 
