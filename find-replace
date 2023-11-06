@@ -3,6 +3,6 @@
 if [[ $(uname) == "Linux" ]]; then  # We are on Linux
     rg -l $1 | xargs sed -i "s@$1@$2@g"
 elif [[ $(uname) == "Darwin" ]]; then # We are on MacOS
-    rg -l $1 | xargs sed -i "" "s@$1@$2@g"
+    rg -l $1 | xargs gsed -i "s@$1@$2@g"
 fi
 
