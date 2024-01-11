@@ -1,0 +1,4 @@
+#!/usr/bin/env fish
+
+tmux switch-client -t $(tmux list-sessions | fzf | awk -F: '{print $1}')
+
