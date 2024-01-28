@@ -1,0 +1,23 @@
+#! /usr/bin/python3
+
+import argparse
+
+def remove_trailing_whitespace(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    trimmed_lines = [line.rstrip() + '\n' for line in lines]
+    with open(file_path, 'w') as file:
+        file.writelines(trimmed_lines)
+
+def main():
+    parser = argparse.ArgumentParser(description="Remove trailing whitespace from files.")
+    parser.add_argument('files', nargs='+', help='List of file paths to process.')
+
+    args = parser.parse_args()
+
+    for file_path in args.files:
+        remove_trailing_whitespace(file_path)
+
+if __name__ == "__main__":
+    main()
+
