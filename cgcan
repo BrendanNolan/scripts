@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+
+cargo +nightly check
+cargo +nightly check --tests
+cargo +nightly check --examples
+cargo +nightly clippy
+cargo +nightly clippy --tests
+cargo +nightly clippy --examples
+cargo +nightly fmt --check

@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+
+cargo check
+cargo check --tests
+cargo check --examples
+cargo clippy
+cargo clippy --tests
+cargo clippy --examples
+cargo fmt --check
