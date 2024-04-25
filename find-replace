@@ -1,10 +1,7 @@
 #!/usr/bin/env fish
 
 function find_replace
-    set -l options 'h/help' 'p/path='
-    argparse $options -- $argv
-    set -l find (argparse 'f/find=' -- $argv)
-    set -l replace (argparse 'r/replace=' -- $argv)
+    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' -- $argv
 
     if set -q _flag_help
         echo 'Usage: find_replace -f <search text> -r <replacement text> -p <path>'
@@ -19,9 +16,9 @@ function find_replace
 
     switch (uname)
         case Darwin # macOS
-            rg -l $path | xargs gsed -i "s@$find@$replace@g"
+            rg -l $_flag_find $path | xargs gsed -i "s@$_flag_find@$_flag_replace@g"
         case Linux
-            rg -l $path | xargs sed -i "s@$find@$replace@g"
+            rg -l $_flag_find $path | xargs sed -i "s@$_flag_find@$_flag_replace@g"
         case '*'
             echo 'You seem to be neither on macOS nor on Linux. Exiting.'
     end
