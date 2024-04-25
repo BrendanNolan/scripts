@@ -1,12 +1,11 @@
 #!/usr/bin/env fish
 
 function find_replace
-    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' 'regex' -- $argv
+    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' -- $argv
 
     if set -q _flag_help
         echo 'Usage:'
         echo '    find_replace -f <search text> -r <replacement text> -p <path>'
-        echo 'If you want your search text to be treated as a regex, also pass the --regex flag.'
         exit 0
     end
 
@@ -16,16 +15,11 @@ function find_replace
         set -l path .
     end
 
-    set -l find_regex (string escape --style=regex $_flag_find)
-    if set -q _flag_regex
-        set -l find_regex $_flag_find
-    end
-
     switch (uname)
         case Darwin # macOS
-            rg -l $find_regex $path | xargs gsed -i "s@$find_regex@$_flag_replace@g"
+            rg -l $_flag_find $path | xargs gsed -i "s@$_flag_find@$_flag_replace@g"
         case Linux
-            rg -l $find_regex $path | xargs sed -i "s@$find_regex@$_flag_replace@g"
+            rg -l $_flag_find $path | xargs sed -i "s@$_flag_find@$_flag_replace@g"
         case '*'
             echo 'You seem to be neither on macOS nor on Linux. Exiting.'
     end
