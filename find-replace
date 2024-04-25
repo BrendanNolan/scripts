@@ -1,8 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env fish
 
-if [[ $(uname) == "Linux" ]]; then  # We are on Linux
-    rg -l $1 | xargs sed -i "s@$1@$2@g"
-elif [[ $(uname) == "Darwin" ]]; then # We are on MacOS
-    rg -l $1 | xargs gsed -i "s@$1@$2@g"
-fi
+function find_replace
+    set -l options 'h/help' 'p/path='
+    argparse $options -- $argv
+    set -l find (argparse 'f/find=' -- $argv)
+    set -l replace (argparse 'r/replace=' -- $argv)
 
+    if set -q _flag_help
+        echo 'Usage: find_replace -f <search text> -r <replacement text> -p <path>'
+        exit 0
+    end
+
+    if set -q _flag_path
+        set -l path $_flag_path
+    else
+        set -l path .
+    end
+
+    switch (uname)
+        case Darwin # macOS
+            rg -l $path | xargs gsed -i "s@$find@$replace@g"
+        case Linux
+            rg -l $path | xargs sed -i "s@$find@$replace@g"
+        case '*'
+            echo 'You seem to be neither on macOS nor on Linux. Exiting.'
+    end
+end
+
+find_replace $argv
