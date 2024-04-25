@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+
+function say_hello
+    argparse 'n/name=' -- $argv
+    echo "Hello, $_flag_name"
+end
+
+say_hello $argv
+
