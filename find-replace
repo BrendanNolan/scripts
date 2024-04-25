@@ -14,11 +14,13 @@ function find_replace
         set -l path .
     end
 
+    set -l find_regex (string escape --style=regex $_flag_find)
+
     switch (uname)
         case Darwin # macOS
-            rg -l $_flag_find $path | xargs gsed -i "s@$_flag_find@$_flag_replace@g"
+            rg -l $find_regex $path | xargs gsed -i "s@$find_regex@$_flag_replace@g"
         case Linux
-            rg -l $_flag_find $path | xargs sed -i "s@$_flag_find@$_flag_replace@g"
+            rg -l $find_regex $path | xargs sed -i "s@$find_regex@$_flag_replace@g"
         case '*'
             echo 'You seem to be neither on macOS nor on Linux. Exiting.'
     end
