@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#! /usr/bin/env fish
 
 function find_replace
     argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' -- $argv

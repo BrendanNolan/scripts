@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Usage: <script> <.txt file from which to restore session>
 # Exampe usage: <script> ~/my-fave-tmux-session.txt

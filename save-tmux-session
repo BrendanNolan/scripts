@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Usage: <script> <.txt file to which to save session>
 # Exampe usage: <script> ~/my-fave-tmux-session.txt

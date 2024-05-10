@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 # Credit The Primeagen
 
 languages=`echo "lua cpp c rust python" | tr ' ' '\n'`

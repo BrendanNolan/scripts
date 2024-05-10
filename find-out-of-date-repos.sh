@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 is_git_repo() {
   [ -d "$1/.git" ]

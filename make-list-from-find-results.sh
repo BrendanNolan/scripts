@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 items=(`find . -name '*lua'`)
 for item in "${items[@]}"; do

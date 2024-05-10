@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#! /usr/bin/env fish
 
 # Function that returns a list of all .rs files in the current directory
 function get_rust_files
