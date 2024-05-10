@@ -9,15 +9,13 @@ function find_replace
         exit 0
     end
 
+    set -l path .
     if set -q _flag_path
         set -l path $_flag_path
-    else
-        set -l path .
     end
 
-    if not set -q _flag_regex
-        set -l to_find (string escape --style=regex $_flag_find)
-    else
+    set -l to_find (string escape --style=regex $_flag_find)
+    if set -q _flag_regex
         set -l to_find $_flag_find
     end
 
