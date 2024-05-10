@@ -1,7 +1,7 @@
 #! /usr/bin/env fish
 
 function find_replace
-    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' -- $argv
+    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' 'regex' -- $argv
 
     if set -q _flag_help
         echo 'Usage:'
@@ -15,8 +15,14 @@ function find_replace
         set -l path .
     end
 
-    set -l files (rg -l $_flag_find $path)
-    set -l sed_search "s@$_flag_find@$_flag_replace@g"
+    if not set -q _flag_regex
+        set -l to_find (string escape --style=regex $_flag_find)
+    else
+        set -l to_find $_flag_find
+    end
+
+    set -l files (rg -l $to_find $path)
+    set -l sed_search "s@$to_find@$_flag_replace@g"
 
     switch (uname)
         case Darwin # macOS
