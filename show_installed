@@ -1,9 +1,9 @@
 #! /usr/bin/env fish
 
-printf "========homebrew========\n:"
+printf "========homebrew========\n"
 brew leaves
 
-printf "\n========cargo========\n:"
+printf "\n========cargo========\n"
 cargo install --list
 
 #printf("go\n:")
