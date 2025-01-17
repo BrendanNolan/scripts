@@ -1,11 +1,18 @@
 #!/usr/bin/env fish
 
-echo "Are you sure that you want to delete the current branch from remote?"
-read -n1 -p "Input: " user_input
-
-if test "$user_input" = "y"
-    git push origin --delete (git branch --show-current)
-else
-    echo "Doing nothing. Goodbye"
+while read --nchars 1 -l response \
+    --prompt-str="Are you sure that you want to delete the remote branch? (y/n)"
+      or return 1 # if the read was aborted with ctrl-c/ctrl-d
+    switch $response
+        case y Y
+            git push origin --delete (git branch --show-current)
+            git branch --unset-upstream
+            return 1
+        case n N
+            echo Not showing
+            return 1
+        case '*'
+            echo "Please type y or n"
+            continue
+    end
 end
-
