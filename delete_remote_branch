@@ -7,10 +7,10 @@ while read --nchars 1 -l response \
         case y Y
             git push origin --delete (git branch --show-current)
             git branch --unset-upstream
-            return 1
+            return 0
         case n N
-            echo Not showing
-            return 1
+            echo "Doing nothing"
+            return 0
         case '*'
             echo "Please type y or n"
             continue
