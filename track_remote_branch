@@ -1,0 +1,4 @@
+#!/usr/bin/env fish
+
+git branch --set-upstream-to=origin/(git branch --show-current) (git branch --show-current)
+
