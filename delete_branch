@@ -1,0 +1,11 @@
+#!/usr/bin/env fish
+
+echo "Are you sure that you want to delete the current branch from remote?"
+read -n1 -p "Input: " user_input
+
+if test "$user_input" = "y"
+    git push origin --delete (git branch --show-current)
+else
+    echo "Doing nothing. Goodbye"
+end
+
