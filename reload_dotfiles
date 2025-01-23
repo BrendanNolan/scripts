@@ -1,0 +1,4 @@
+#!/usr/bin/env fish
+
+cd $HOME/dotfiles
+stow -D . && stow --no-folding .
