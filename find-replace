@@ -1,36 +1,19 @@
 #! /usr/bin/env fish
 
+function print_find_replace_help_message
+    echo 'Usage:'
+    echo '    find_replace -f <search text> -r <replacement text> -p <path> [--regex]'
+    echo 'By default your search string will be used as a literal. If you want it to be used as a regex, pass the --regex flag.'
+    exit 0
+end
+
 function find_replace
     argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=' 'regex' -- $argv
-
     if set -q _flag_help
-        echo 'Usage:'
-        echo '    find_replace -f <search text> -r <replacement text> -p <path> [--regex]'
-        echo 'By default your search string will be used as a literal. If you want it to be used as a regex, pass the --regex flag.'
+        print_find_replace_help_message
         exit 0
     end
-
-    set -l path .
-    if set -q _flag_path
-        set path $_flag_path
-    end
-
-    set -l to_find (string escape --style=regex $_flag_find)
-    if set -q _flag_regex
-        set to_find $_flag_find
-    end
-
-    set -l files (rg -l $to_find $path)
-    set -l sed_search "s@$to_find@$_flag_replace@g"
-
-    switch (uname)
-        case Darwin # macOS
-            echo $files | xargs gsed -i $sed_search
-        case Linux
-            echo $files | xargs sed -i $sed_search
-        case '*'
-            echo 'You seem to be neither on macOS nor on Linux. Exiting.'
-    end
+    fd --type file . "$_flag_path" --exec sd "$_flag_find" "$_flag_replace"
 end
 
 find_replace $argv
