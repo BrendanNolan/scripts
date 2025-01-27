@@ -18,9 +18,9 @@ function find_replace
         set path $_flag_path
     end 
     if set -q _flag_regex
-        fd --type file . "$_flag_path" --exec sd "$_flag_find" "$_flag_replace"
+        fd --type file . "$path" --exec sd "$_flag_find" "$_flag_replace"
     else
-        fd --type file . "$_flag_path" --exec sd --fixed-string "$_flag_find" "$_flag_replace"
+        fd --type file . "$path" --exec sd --fixed-string "$_flag_find" "$_flag_replace"
     end
 end
 
