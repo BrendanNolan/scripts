@@ -20,7 +20,7 @@ function find_replace
     if set -q _flag_regex
         fd --type file . "$path" --exec sd "$_flag_find" "$_flag_replace"
     else
-        fd --type file . "$path" --exec sd --fixed-string "$_flag_find" "$_flag_replace"
+        fd --type file . "$path" --exec sd --fixed-strings "$_flag_find" "$_flag_replace"
     end
 end
 
