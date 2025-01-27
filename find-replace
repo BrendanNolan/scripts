@@ -8,7 +8,7 @@ function print_find_replace_help_message
 end
 
 function find_replace
-    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=' 'regex' -- $argv
+    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' 'regex' -- $argv
     if set -q _flag_help
         print_find_replace_help_message
         exit 0
