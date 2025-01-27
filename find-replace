@@ -13,7 +13,11 @@ function find_replace
         print_find_replace_help_message
         exit 0
     end
-    fd --type file . "$_flag_path" --exec sd "$_flag_find" "$_flag_replace"
+    if set -q _flag_regex
+        fd --type file . "$_flag_path" --exec sd "$_flag_find" "$_flag_replace"
+    else
+        fd --type file . "$_flag_path" --exec sd --fixed-string "$_flag_find" "$_flag_replace"
+    end
 end
 
 find_replace $argv
