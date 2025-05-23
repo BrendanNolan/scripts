@@ -14,24 +14,28 @@ with open(sys.argv[1], 'r') as f:
 for entry in data:
     session = entry.get("session", "")
     assert session
-    window_dirs = entry["window_dirs"]
+    window_dirs = entry["window_dirs_and_titles"]
     assert window_dirs
-    first_dir = window_dirs[0]
+    first_dir, first_title = window_dirs[0]
     os.system(f"tmux new-session -d -s {session} -c {first_dir}")
-    for dir in window_dirs[1:]:
-        os.system(f"tmux new-window -t {session}: -c {dir}")
+    if first_title:
+        os.system(f"tmux rename-window -t {session}:0 -n {first_title}")
+    for dir, title in window_dirs[1:]:
+        title_specifier = ""
+        if title:
+            title_specifier = f" -n {title}"
+        os.system(f"tmux new-window -t {session}: -c {dir}{title_specifier}")
 
 os.system("tmux attach")
 
-# Example JSON file:
+# Example json file specifying tmux sessions and windows
 # [
 #   {
-#     "session": "alpha",
-#     "window_dirs": ["/home/user1", "/var/log"]
+#     "session": "dotfiles",
+#     "window_dirs_and_titles": [["$HOME/dotfiles", ""], ["$HOME/dotfiles", ""], ["$HOME/dotfiles", "build"]]
 #   },
 #   {
-#     "session": "beta",
-#     "window_dirs": ["/usr", "/bin"]
+#     "session": "scripts",
+#     "window_dirs_and_titles": [["$HOME/dev/scripts", ""], ["$HOME/dev/scripts", ""], ["$HOME/dev/scripts", "build"]]
 #   }
 # ]
-
