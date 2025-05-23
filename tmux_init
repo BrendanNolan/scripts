@@ -23,7 +23,7 @@ for entry in data:
     first_dir, first_title = window_dirs[0]
     os.system(f"tmux new-session -d -s {session} -c {first_dir}")
     if first_title:
-        os.system(f"tmux rename-window -t {session}:0 -n {first_title}")
+        os.system(f"tmux rename-window -t {session}:0 {first_title}")
     for dir, title in window_dirs[1:]:
         title_specifier = ""
         if title:
