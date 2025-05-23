@@ -11,9 +11,13 @@ if len(sys.argv) != 2:
 with open(sys.argv[1], 'r') as f:
     data = json.load(f)
 
+first_session = ""
+
 for entry in data:
     session = entry.get("session", "")
     assert session
+    if not first_session:
+        first_session = session
     window_dirs = entry["window_dirs_and_titles"]
     assert window_dirs
     first_dir, first_title = window_dirs[0]
@@ -26,7 +30,8 @@ for entry in data:
             title_specifier = f" -n {title}"
         os.system(f"tmux new-window -t {session}: -c {dir}{title_specifier}")
 
-os.system("tmux attach")
+os.system(f"tmux select-window -t {first_session}:0")
+os.system(f"tmux attach -t {first_session}")
 
 # Example json file specifying tmux sessions and windows
 # [
