@@ -29,8 +29,8 @@ for entry in data:
         if title:
             title_specifier = f" -n {title}"
         os.system(f"tmux new-window -t {session}: -c {dir}{title_specifier}")
+    os.system(f"tmux select-window -t {session}:0")
 
-os.system(f"tmux select-window -t {first_session}:0")
 os.system(f"tmux attach -t {first_session}")
 
 # Example json file specifying tmux sessions and windows
