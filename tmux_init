@@ -5,7 +5,7 @@ import sys
 import os
 
 if len(sys.argv) != 2:
-    print(f"Usage: {sys.argv[0]} <json_file_specifying_tmux_sessions_and_windows>")
+    print(f"Usage: tmux_init <json_file_specifying_tmux_sessions_and_windows>")
     sys.exit(1)
 
 with open(sys.argv[1], 'r') as f:
