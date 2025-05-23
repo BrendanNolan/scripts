@@ -1,16 +1,37 @@
-#! /usr/bin/env fish
+#!/usr/bin/env python3
 
-set -l sessions "dotfiles" "$HOME/dotfiles" "scripts" "$HOME/dev/scripts"
+import json
+import sys
+import os
 
-set -l window_count_per_session 3
+if len(sys.argv) != 2:
+    print(f"Usage: {sys.argv[0]} <json_file_specifying_tmux_sessions_and_windows>")
+    sys.exit(1)
 
-for i in (seq 1 2 (count $sessions))
-    set -l session_name $sessions[$i]
-    set -l opening_dir $sessions[(math $i + 1)]
-    tmux new-session -d -s $session_name -c $opening_dir
-    for window_index in (seq 1 (math $window_count_per_session - 1))
-        tmux new-window -t $session_name: -c $opening_dir
-    end
-end
+with open(sys.argv[1], 'r') as f:
+    data = json.load(f)
 
-tmux attach
+for entry in data:
+    session = entry.get("session", "")
+    assert session
+    window_dirs = entry["window_dirs"]
+    assert window_dirs
+    first_dir = window_dirs[0]
+    os.system(f"tmux new-session -d -s {session} -c {first_dir}")
+    for dir in window_dirs[1:]:
+        os.system(f"tmux new-window -t {session}: -c {dir}")
+
+os.system("tmux attach")
+
+# Example JSON file:
+# [
+#   {
+#     "session": "alpha",
+#     "window_dirs": ["/home/user1", "/var/log"]
+#   },
+#   {
+#     "session": "beta",
+#     "window_dirs": ["/usr", "/bin"]
+#   }
+# ]
+
