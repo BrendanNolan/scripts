@@ -14,7 +14,7 @@ BEGIN {
     title=$3
     path=$4
     if (index(path, home) == 1) {
-        path = "~" substr(path, length(home)+1)
+        path = "$HOME" substr(path, length(home)+1)
     }
     key = session "-" window
     if (!(session in sessions)) {
