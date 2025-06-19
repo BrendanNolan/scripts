@@ -1,11 +1,5 @@
-#! /usr/bin/env fish
+#! /usr/bin/env bash
 
 # stash the current changes without changing the files back to their HEAD state
 
-set -l message ""
-
-if test (count $argv) -gt 0
-    mesage = $argv[1]
-end
-
-git stash store -m $message (git stash create)
+git stash store -m "${1:-}" $(git stash create)
