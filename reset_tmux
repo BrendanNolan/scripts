@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
 rm -rf $HOME/.tmux/plugins/*
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
