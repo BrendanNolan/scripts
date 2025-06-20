@@ -1,9 +1,9 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
-if test (count $argv) -ne 1
+if [[ $# -ne 1 ]]; then
     echo "Usage: format_json <json_file>"
     exit 1
-end
+fi
 
-jq . $argv[1] | sponge $argv[1]
+jq . "$1" | sponge "$1"
 
