@@ -1,18 +1,25 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
-while read --nchars 1 -l response \
-    --prompt-str="Are you sure that you want to delete the remote branch? (y/n)"
-      or return 1 # if the read was aborted with ctrl-c/ctrl-d
-    switch $response
-        case y Y
-            git push origin --delete (git branch --show-current)
+while true; do
+    read -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
+    echo # Move the cursor down a line
+    if [[ $? -ne 0 ]]; then
+        exit 1
+    fi
+
+    case "$response" in
+        y|Y)
+            git push origin --delete "$(git branch --show-current)"
             git branch --unset-upstream
-            return 0
-        case n N
+            exit 0
+            ;;
+        n|N)
             echo "Doing nothing"
-            return 0
-        case '*'
+            exit 0
+            ;;
+        *)
             echo "Please type y or n"
-            continue
-    end
-end
+            ;;
+    esac
+done
+
