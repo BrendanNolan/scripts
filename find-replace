@@ -1,27 +1,34 @@
-#! /usr/bin/env fish
+#! /usr/bin/env bash
 
-function print_find_replace_help_message
-    echo 'Usage:'
-    echo '    find_replace -f <search text> -r <replacement text> -p <path> [--regex]'
-    echo 'By default your search string will be used as a literal. If you want it to be used as a regex, pass the --regex flag.'
-    exit 0
-end
+usage() {
+    echo 'Usage: find-replace -f FIND_TEXT -r REPLACEMENT_TEXT [-x] [path]'
+    echo 'Arguments: [path] the search path (defaults to current working directory)'
+    echo 'Options: -x Use regular expression matching (defaults to false)'
+}
 
-function find_replace
-    argparse 'h/help' 'f/find=' 'r/replace=' 'p/path=?' 'regex' -- $argv
-    if set -q _flag_help
-        print_find_replace_help_message
-        exit 0
-    end
-    set -l path .
-    if set -q _flag_path
-        set path $_flag_path
-    end 
-    if set -q _flag_regex
-        fd --type file . "$path" | xargs -P0 -I{} sd "$_flag_find" "$_flag_replace" {}
-    else
-        fd --type file . "$path" | xargs -P0 -I{} sd --fixed-strings "$_flag_find" "$_flag_replace" {}
-    end
-end
+find=""
+replace=""
+regex=false
+path="."
 
-find_replace $argv
+while getopts 'hfrpx' opt; do
+    case "${opt}" in
+        h) usage; exit 0;;
+        f) find=${OPTARG};;
+        r) replace=${OPTARG};;
+        x) regex=true;;
+        p) path=${OPTARG};;
+        *) usage >&2; exit 1;;
+    esac
+done
+
+if [[ -z "${find}" || -z "${replace}" ]]; then
+    usage >&2
+    exit 1
+fi
+
+if [[ $regex ]]; then
+    fd --type file . "$path" | xargs -P0 -I{} sd "$find" "$replace" {}
+else
+    fd --type file . "$path" | xargs -P0 -I{} sd --fixed-strings "$find" "$replace" {}
+fi
