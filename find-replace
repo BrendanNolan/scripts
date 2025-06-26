@@ -33,8 +33,8 @@ if [[ -z "${find}" || -z "${replace}" ]]; then
 fi
 
 if $regex; then
-    fd --type file . "$path" | xargs -P0 -I{} sd "$find" "$replace" {}
+    rg -l "$find" "$path" | xargs -P0 -I{} sd "$find" "$replace" {}
 else
-    fd --type file . "$path" | xargs -P0 -I{} sd --fixed-strings "$find" "$replace" {}
+    rg -l "$find" "$path" | xargs -P0 -I{} sd --fixed-strings "$find" "$replace" {}
 fi
 
