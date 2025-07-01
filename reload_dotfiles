@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 cd $HOME/dotfiles
-stow -D . && stow --no-folding .
+stow -D . && stow -t "$HOME" .
 echo "Dotfiles reloaded with stow"
