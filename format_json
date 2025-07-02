@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [[ $# -ne 1 ]]; then
     echo "Usage: format_json <json_file>"
     exit 1

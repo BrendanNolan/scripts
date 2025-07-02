@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 cd $HOME/dev/dotfiles
 stow -D . && stow -t "$HOME" .
 echo "Dotfiles reloaded with stow"

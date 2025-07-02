@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -euo pipefail
+
 is_git_repo() {
   [ -d "$1/.git" ]
 }

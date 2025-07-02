@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 rm -rf $HOME/.tmux/plugins/*
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm

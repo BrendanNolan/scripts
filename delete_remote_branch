@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 while true; do
     read -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
     echo # Move the cursor down a line

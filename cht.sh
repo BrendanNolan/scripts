@@ -1,4 +1,6 @@
 #! /usr/bin/env bash
+
+set -euo pipefail
 # Credit The Primeagen
 
 languages=$(echo "lua cpp c rust python" | tr ' ' '\n')

@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -euo pipefail
+
 # Usage: <script> <.txt file to which to save session>
 # Exampe usage: <script> ~/my-fave-tmux-session.txt
 

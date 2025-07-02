@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -euo pipefail
+
 dirs=$(find . -maxdepth 1 -type d -not -path '*/\.*' -not -path '.')
 
 for dir in $dirs; do

@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -euo pipefail
+
 usage() {
     echo 'Usage: find-replace -f FIND_TEXT -r REPLACEMENT_TEXT [-x] [path]'
     echo 'Arguments: [path] the search path (defaults to current working directory)'
