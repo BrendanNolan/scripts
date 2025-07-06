@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+pkill -x AdobeReader
+pkill -x Obsidian
+pkill -x "Google Chrome"
+pkill -x wezterm-gui
+pkill -x AeroSpace
+pkill -x borders
+
