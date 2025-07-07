@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pkill -x AdobeReader
+pkill -x zathura
 pkill -x Obsidian
 pkill -x "Google Chrome"
 pkill -x wezterm-gui
