@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 pkill -9 -x zathura
 pkill -9 -x Obsidian
 pkill -9 -x "Google Chrome"
