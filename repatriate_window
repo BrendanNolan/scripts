@@ -2,18 +2,39 @@
 
 set -euo pipefail
 
-current_app_name=$(aerospace list-windows --focused --format %{app-name})
+usage() {
+    echo "Usage: repatriate_window [-a]"
+    echo "Handles focused window by default; handles all windows if the -a switch is provided"
+}
 
-case "$current_app_name" in
-    WezTerm)
-        aerospace move-node-to-workspace 1 ;;
-    "Google Chrome")
-        aerospace move-node-to-workspace 2 ;;
-    Obsidian)
-        aerospace move-node-to-workspace 3 ;;
-    Zathura)
-        aerospace move-node-to-workspace 4 ;;
-    *)
-        aerospace move-node-to-workspace 5 ;;
-esac
+all=false
 
+while getopts 'a' opt; do
+    case "${opt}" in
+        a) all=true ;;
+        *) usage >&2; exit 1;;
+    esac
+done
+
+windows=()
+
+if $all; then
+    readarray -t windows < <(aerospace list-windows --all --format %{app-name})
+else
+    readarray -t windows < <(aerospace list-windows --focused --format %{app-name})
+fi
+
+for window in "${windows[@]}"; do
+    case "$window" in
+        WezTerm)
+            aerospace move-node-to-workspace 1 ;;
+        "Google Chrome")
+            aerospace move-node-to-workspace 2 ;;
+        Obsidian)
+            aerospace move-node-to-workspace 3 ;;
+        Zathura)
+            aerospace move-node-to-workspace 4 ;;
+        *)
+            aerospace move-node-to-workspace 5 ;;
+    esac
+done

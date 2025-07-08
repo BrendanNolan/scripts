@@ -1,0 +1,8 @@
+!#/usr/bin/env bash
+
+set -euo pipefail
+
+pgrep -x Obsidian || open -a Obsidian
+pgrep -x "Google Chrome" || open -a "Google Chrome"
+pgrep -x wezterm-gui || open -a wezterm # Opening wezterm last because I want to be in wezterm when startup completes
+
