@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-pkill -x zathura
-pkill -x Obsidian
-pkill -x "Google Chrome"
-pkill -x wezterm-gui
-pkill -x AeroSpace
-pkill -x borders
+pkill -9 -x zathura
+pkill -9 -x Obsidian
+pkill -9 -x "Google Chrome"
+pkill -9 -x wezterm-gui
+pkill -9 -x AeroSpace
+pkill -9 -x borders
 
