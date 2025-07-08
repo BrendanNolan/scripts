@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+current_app_name=$(aerospace list-windows --focused --format %{app-name})
+
+case "$current_app_name" in
+    WezTerm)
+        aerospace move-node-to-workspace 1 ;;
+    "Google Chrome")
+        aerospace move-node-to-workspace 2 ;;
+    Obsidian)
+        aerospace move-node-to-workspace 3 ;;
+    Zathura)
+        aerospace move-node-to-workspace 4 ;;
+    *)
+        aerospace move-node-to-workspace 5 ;;
+esac
+
