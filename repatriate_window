@@ -19,22 +19,25 @@ done
 windows=()
 
 if $all; then
-    readarray -t windows < <(aerospace list-windows --all --format %{app-name})
+    readarray -t windows < <(aerospace list-windows --all --format "%{app-name},%{window-id}")
 else
-    readarray -t windows < <(aerospace list-windows --focused --format %{app-name})
+    readarray -t windows < <(aerospace list-windows --focused --format "%{app-name},%{window-id}")
 fi
 
 for window in "${windows[@]}"; do
-    case "$window" in
+    IFS=',' read -ra app_name_and_window_id <<< "$window"
+    app_name="${app_name_and_window_id[0]}"
+    window_id="${app_name_and_window_id[1]}"
+    case "$app_name" in
         WezTerm)
-            aerospace move-node-to-workspace 1 ;;
+            aerospace move-node-to-workspace "$window_id" 1 ;;
         "Google Chrome")
-            aerospace move-node-to-workspace 2 ;;
+            aerospace move-node-to-workspace "$window_id" 2 ;;
         Obsidian)
-            aerospace move-node-to-workspace 3 ;;
+            aerospace move-node-to-workspace "$window_id" 3 ;;
         Zathura)
-            aerospace move-node-to-workspace 4 ;;
+            aerospace move-node-to-workspace "$window_id" 4 ;;
         *)
-            aerospace move-node-to-workspace 5 ;;
+            aerospace move-node-to-workspace "$window_id" 5 ;;
     esac
 done
