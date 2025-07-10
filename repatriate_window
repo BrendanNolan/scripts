@@ -30,14 +30,14 @@ for window in "${windows[@]}"; do
     window_id="${app_name_and_window_id[1]}"
     case "$app_name" in
         WezTerm)
-            aerospace move-node-to-workspace "$window_id" 1 ;;
+            aerospace move-node-to-workspace --window-id "$window_id" 1 2>/dev/null ;;
         "Google Chrome")
-            aerospace move-node-to-workspace "$window_id" 2 ;;
+            aerospace move-node-to-workspace --window-id "$window_id" 2 2>/dev/null ;;
         Obsidian)
-            aerospace move-node-to-workspace "$window_id" 3 ;;
+            aerospace move-node-to-workspace --window-id "$window_id" 3 2>/dev/null ;;
         Zathura)
-            aerospace move-node-to-workspace "$window_id" 4 ;;
+            aerospace move-node-to-workspace --window-id "$window_id" 4 2>/dev/null ;;
         *)
-            aerospace move-node-to-workspace "$window_id" 5 ;;
+            aerospace move-node-to-workspace --window-id "$window_id" 5 2>/dev/null ;;
     esac
 done
