@@ -3,8 +3,9 @@
 set -euo pipefail
 
 usage() {
-    echo "Usage: repatriate_window [-a]"
-    echo "Handles focused window by default; handles all windows if the -a switch is provided"
+    echo "Usage: repatriate_windows [-a]"
+    echo "-a    Send every window with a default workspace to its default workspace"
+    echo "      If omitted, only the currently focused window is sent to its defauls workspace, if it has one."
 }
 
 all=false
