@@ -25,18 +25,22 @@ else
     readarray -t windows < <(aerospace list-windows --focused --format "%{app-name},%{window-id}")
 fi
 
+move_it() {
+    aerospace move-node-to-workspace --window-id "$1" "$2" 2>/dev/null
+}
+
 for window in "${windows[@]}"; do
     IFS=',' read -r app_name window_id <<< "$window"
     case "$app_name" in
         WezTerm)
-            aerospace move-node-to-workspace --window-id "$window_id" 1 2>/dev/null ;;
+            move_it "$window_id" 1 ;;
         "Google Chrome")
-            aerospace move-node-to-workspace --window-id "$window_id" 2 2>/dev/null ;;
+            move_it "$window_id" 2 ;;
         Obsidian)
-            aerospace move-node-to-workspace --window-id "$window_id" 3 2>/dev/null ;;
+            move_it "$window_id" 3 ;;
         Zathura)
-            aerospace move-node-to-workspace --window-id "$window_id" 4 2>/dev/null ;;
+            move_it "$window_id" 4 ;;
         *)
-            aerospace move-node-to-workspace --window-id "$window_id" 5 2>/dev/null ;;
+            move_it "$window_id" 5 ;;
     esac
 done
