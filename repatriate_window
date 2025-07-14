@@ -26,9 +26,7 @@ else
 fi
 
 for window in "${windows[@]}"; do
-    IFS=',' read -ra app_name_and_window_id <<< "$window"
-    app_name="${app_name_and_window_id[0]}"
-    window_id="${app_name_and_window_id[1]}"
+    IFS=',' read -r app_name window_id <<< "$window"
     case "$app_name" in
         WezTerm)
             aerospace move-node-to-workspace --window-id "$window_id" 1 2>/dev/null ;;
