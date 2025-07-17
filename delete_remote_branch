@@ -3,25 +3,24 @@
 set -euo pipefail
 
 while true; do
-    read -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
-    echo # Move the cursor down a line
-    if [[ $? -ne 0 ]]; then
-        exit 1
-    fi
+	read -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
+	echo # Move the cursor down a line
+	if [[ $? -ne 0 ]]; then
+		exit 1
+	fi
 
-    case "$response" in
-        y|Y)
-            git push origin --delete "$(git branch --show-current)"
-            git branch --unset-upstream
-            exit 0
-            ;;
-        n|N)
-            echo "Doing nothing"
-            exit 0
-            ;;
-        *)
-            echo "Please type y or n"
-            ;;
-    esac
+	case "$response" in
+	y | Y)
+		git push origin --delete "$(git branch --show-current)"
+		git branch --unset-upstream
+		exit 0
+		;;
+	n | N)
+		echo "Doing nothing"
+		exit 0
+		;;
+	*)
+		echo "Please type y or n"
+		;;
+	esac
 done
-

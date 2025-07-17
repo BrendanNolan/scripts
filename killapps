@@ -6,4 +6,3 @@ pkill -9 -x "Google Chrome"
 pkill -9 -x wezterm-gui
 pkill -9 -x AeroSpace
 pkill -9 -x borders
-

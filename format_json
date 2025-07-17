@@ -3,9 +3,8 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    echo "Usage: format_json <json_file>"
-    exit 1
+	echo "Usage: format_json <json_file>"
+	exit 1
 fi
 
 jq . "$1" | sponge "$1"
-
