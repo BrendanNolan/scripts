@@ -8,7 +8,8 @@ is_git_repo() {
 
 is_out_of_date() {
 	# git -C "$1" fetch
-	local status=$(git -C "$1" status)
+	local status
+	status="$(git -C "${1}" status)"
 	if [[ $status == *"Your branch is up-to-date with 'origin/master'"* ]] || [[ $status == *"Your branch is up-to-date with 'origin/main'"* ]]; then
 		return 1
 	else
@@ -18,12 +19,12 @@ is_out_of_date() {
 
 check_repos_and_report_status() {
 	local base_dir="$1"
-	for repo in $(find "$base_dir" -type d -name ".git"); do
+	while IFS= read -r -d '' repo; do
 		repo_dir=$(dirname "$repo")
 		if is_out_of_date "$repo_dir"; then
 			echo "Repository '$repo_dir' is out of date."
 		fi
-	done
+	done < <(find "$base_dir" -type d -name '.git' -print0)
 }
 
 # Check repositories in the specified directory or current directory if no argument is given

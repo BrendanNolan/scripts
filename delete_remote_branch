@@ -3,9 +3,10 @@
 set -euo pipefail
 
 while true; do
-	read -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
+	read -r -n 1 -p "Are you sure that you want to delete the remote branch for $(git branch --show-current)? (y/n) " response
+	proceeding="$?"
 	echo # Move the cursor down a line
-	if [[ $? -ne 0 ]]; then
+	if [[ "${proceeding}" -ne 0 ]]; then
 		exit 1
 	fi
 

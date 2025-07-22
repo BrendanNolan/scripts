@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-prettier --write --prose-wrap=always --print-width=100 $1
+prettier --write --prose-wrap=always --print-width=100 "${1}"

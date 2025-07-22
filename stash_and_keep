@@ -4,4 +4,4 @@ set -euo pipefail
 
 # stash the current changes without changing the files back to their HEAD state
 
-git stash store -m "${1:-}" $(git stash create)
+git stash store -m "${1:-}" "$(git stash create)"

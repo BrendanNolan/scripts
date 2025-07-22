@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-tmux switch-client -t $(tmux list-sessions | fzf | awk -F: '{print $1}')
+tmux switch-client -t "$(tmux list-sessions | fzf | awk -F: '{print $1}')"
