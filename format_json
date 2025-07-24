@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-	echo "Usage: format_json <json_file>"
+	echo "Usage: format_json <json_file>" >&2
 	exit 1
 fi
 
