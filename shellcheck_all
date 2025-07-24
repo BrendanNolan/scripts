@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -ge 2 ]]; then
+	echo "Usage shellcheck_all [dir]" >&2
+	exit 1
+fi
+
+dir="."
+if [[ $# -eq 1 ]]; then
+	dir="${1}"
+fi
+
+rg -0 -l "^#!\s*/usr/bin/env\s+bash\b" "${dir}" | parallel -0 'shellcheck_report {}'
