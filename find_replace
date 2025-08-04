@@ -43,5 +43,5 @@ fi
 if $regex; then
 	rg -l "$find" "$path" | xargs -P0 -I{} sd "$find" "$replace" {}
 else
-	rg -l "$find" "$path" | xargs -P0 -I{} sd --fixed-strings "$find" "$replace" {}
+	rg -Fl "$find" "$path" | xargs -P0 -I{} sd --fixed-strings "$find" "$replace" {}
 fi
