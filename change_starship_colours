@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if [[ $# -ne 3 ]]; then
+	echo "Usage: change_starship_colours FIELD NEW_VALUE STARSHIP_CONF_FILE" >&2
+fi
+
+field=$1
+new_value=$2
+conf_file=$3
+
+old_value=$(grep -m1 "${field}" "${conf_file}" | awk '{print $NF}')
+sed -i "s@${old_value}@${new_value}@g" "${conf_file}"
