@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+if ! which cargo; then
+        # Set up cargo and pass -y to accept defaults
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+fi
+
+os=""
+case "$(uname -s)" in
+    Darwin)
+        os=macos
+        ;;
+    Linux)
+        if [[ -f /etc/os-release ]]; then
+            source /etc/os-release
+            case "$ID" in
+                debian)
+                    os=debian
+                    ;;
+                arch)
+                    os=arch
+                    ;;
+                *)
+                    ;;
+            esac
+        else
+            echo "Unrecognised Linux distro"
+            exit 1
+        fi
+        ;;
+    *)
+        echo "Unknown OS: $(uname -s)"
+        exit 1
+        ;;
+esac
+
+if [[ -z "${os+x}" ]]; then
+    echo "Unknown OS"
+    exit 1
+fi
+
+if ! which git; then
+    case "${os}" in
+        macos
+fi
