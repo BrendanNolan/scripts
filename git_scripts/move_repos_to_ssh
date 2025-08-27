@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+repo_root="${1}"
+find "$repo_root" -type d -name .git -prune -print0 |
+	while IFS= read -r -d '' dotgit; do
+		repo="${dotgit%/.git}"
+		(
+			cd "$repo" || exit
+			url="$(git remote get-url origin 2>/dev/null || true)"
+			[[ "$url" == https://github.com/* ]] || exit 0
+			ssh_url="${url/https:\/\/github.com\//git@github.com:}"
+			git remote set-url origin "$ssh_url"
+			printf 'Switched: %s\n' "$repo"
+		)
+	done
