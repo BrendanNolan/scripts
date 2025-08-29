@@ -12,21 +12,10 @@ Darwin)
 	;;
 Linux)
 	if [[ -f /etc/os-release ]]; then
-		source /etc/os-release
-		case "$ID" in
-		debian)
-			os=debianlike
-			;;
-		ubuntu)
-			os=debianlike
-			;;
-		arch)
-			os=arch
-			;;
-		*)
-			bail "Unrecognised Linux Distro"
-			;;
-		esac
+		os_release_file="/etc/os-release"
+		grep -iqE "ubuntu|debian|arch" "${os_release_file}" || bail "Unrecognised linux distro"
+		grep -iqE "ubuntu|debian" "${os_release_file}" && os=debianlike
+		grep -iq "arch" "${os_release_file}" && os=arch
 	else
 		bail "Unrecognised Linux distro"
 	fi
@@ -37,7 +26,7 @@ Linux)
 esac
 
 [[ -z "${os+x}" ]] && bail "Unrecognised OS"
-[[ "${os}" == debianlike ]] && sudo apt-get update -y
+[[ "${os}" == debianlike ]] && sudo apt-get update
 if [[ "${os}" == macos ]]; then
 	brew_install_script
 	brew_install_script=$(mktemp)
@@ -48,43 +37,6 @@ if [[ "${os}" == macos ]]; then
 	fi
 	unset brew_install_script
 fi
-
-install_rust_toolchain_and_cargo_binstall() {
-	local rustup_install_script
-	rustup_install_script=$(mktemp)
-	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
-	    sh "${rustup_install_script}" -y
-	else
-		bail "Faile to install rustup"
-	fi
-	local cargo_binstall_install_script
-	cargo_binstall_install_script=$(mktemp)
-	if curl -L --proto '=https' --tlsv1.2 -sSf \
-		https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
-		>"${cargo_binstall_install_script}"; then
-		bash "${cargo_binstall_install_script}"
-	else
-		bail "Failed to install cargo-binstall"
-	fi
-}
-
-install_rust_toolchain_and_cargo_binstall
-cargo install cargo-shuttle
-cargo install cargo-update
-cargo install sccache
-cargo install tokio-console
-cargo install tree-sitter-cli
-
-install_macos_only_stuff() {
-	brew install gh # Installing on linux is not straightforward and is best done manually
-	brew install --cask aerospace
-	brew install --cask font-fira-code
-}
-install_macos_only_stuff
-
-install_linux_only_stuff() {
-	sudo pacman -Syu nerd-fonts-fira-code
-}
 
 install() {
 	local is_gui=false
@@ -115,7 +67,7 @@ install() {
 		fi
 		;;
 	debianlike)
-		sudo apt-get install -y "${package}"
+		sudo apt-get install "${package}"
 		;;
 	arch)
 		sudo pacman -Syu --noconfirm "${package}"
@@ -151,8 +103,55 @@ install starship
 install stow
 install tldr
 install tmux
+install unzip
 install yazi
+install zip
 install zoxide
 install zsh
 
 npm install jquery
+
+install_rust_toolchain_and_cargo_binstall() {
+	local rustup_install_script
+	rustup_install_script=$(mktemp)
+	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
+	    sh "${rustup_install_script}"
+	else
+		bail "Faile to install rustup"
+	fi
+	local cargo_binstall_install_script
+	cargo_binstall_install_script=$(mktemp)
+	if curl -L --proto '=https' --tlsv1.2 -sSf \
+		https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
+		>"${cargo_binstall_install_script}"; then
+		bash "${cargo_binstall_install_script}"
+	else
+		bail "Failed to install cargo-binstall"
+	fi
+}
+
+install_rust_toolchain_and_cargo_binstall
+cargo install cargo-shuttle
+cargo install cargo-update
+cargo install sccache
+cargo install tokio-console
+cargo install tree-sitter-cli
+
+install_for_macos() {
+	brew install gh # Installing on linux is not straightforward and is best done manually
+	brew install --cask aerospace
+	brew install --cask font-fira-code
+}
+
+install_for_arch() {
+	sudo pacman -Syu nerd-fonts-fira-code
+}
+
+install_for_debian_like() {
+	# Download the latest FiraCode Nerd Font release
+	pushd /tmp || return 1
+	wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+	unzip FiraCode.zip -d "${HOME}/local/share/fonts"
+	# Refresh font cache
+	fc-cache -fv
+}
