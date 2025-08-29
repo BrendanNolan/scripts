@@ -30,7 +30,7 @@ esac
 if [[ "${os}" == macos ]]; then
 	brew_install_script
 	brew_install_script=$(mktemp)
-    if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
+	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
 		/bin/sh "${brew_install_script}"
 	else
 		bail "Failed to install homebrew"
@@ -40,21 +40,21 @@ fi
 
 install() {
 	local is_gui=false
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --gui)
-                is_gui=true
-                shift
-                ;;
-            --) # end of options
-                shift
-                break # break out of while loop
-                ;;
-            *)  # anything else, stop processing
-                break # break out of while loop
-                ;;
-        esac
-    done
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--gui)
+			is_gui=true
+			shift
+			;;
+		--) # end of options
+			shift
+			break # break out of while loop
+			;;
+		*)     # anything else, stop processing
+			break # break out of while loop
+			;;
+		esac
+	done
 	[[ $# -ne 1 ]] && echo "Usage: install [--gui] package_name"
 	[[ $# -ne 1 ]] && exit 1
 	local package="${1}"
@@ -115,7 +115,7 @@ install_rust_toolchain_and_cargo_binstall() {
 	local rustup_install_script
 	rustup_install_script=$(mktemp)
 	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
-	    sh "${rustup_install_script}"
+		sh "${rustup_install_script}"
 	else
 		bail "Faile to install rustup"
 	fi
