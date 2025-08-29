@@ -1,45 +1,78 @@
 #!/usr/bin/env bash
 
+bail() {
+	echo "${1}"
+	exit 1
+}
+
 if ! which cargo; then
-        # Set up cargo and pass -y to accept defaults
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	# Set up cargo and pass -y to accept defaults
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
 
 os=""
 case "$(uname -s)" in
-    Darwin)
-        os=macos
-        ;;
-    Linux)
-        if [[ -f /etc/os-release ]]; then
-            source /etc/os-release
-            case "$ID" in
-                debian)
-                    os=debian
-                    ;;
-                arch)
-                    os=arch
-                    ;;
-                *)
-                    ;;
-            esac
-        else
-            echo "Unrecognised Linux distro"
-            exit 1
-        fi
-        ;;
-    *)
-        echo "Unknown OS: $(uname -s)"
-        exit 1
-        ;;
+Darwin)
+	os=macos
+	;;
+Linux)
+	if [[ -f /etc/os-release ]]; then
+		source /etc/os-release
+		case "$ID" in
+		debian)
+			os=debianlike
+			;;
+		ubuntu)
+			os=debianlike
+			;;
+		arch)
+			os=arch
+			;;
+		*)
+			bail "Unrecognised Linux Distro"
+			;;
+		esac
+	else
+		bail "Unrecognised Linux distro"
+	fi
+	;;
+*)
+	bail "Unrecognised OS"
+	;;
 esac
 
-if [[ -z "${os+x}" ]]; then
-    echo "Unknown OS"
-    exit 1
-fi
+[[ -z "${os+x}" ]] && bail "Unrecognised OS"
+[[ "${os}" == debianlike ]] && sudo apt-get update -y
 
-if ! which git; then
-    case "${os}" in
-        macos
-fi
+is_gui() {
+	[[ $# -ne 1 ]] && echo "is_gui function requires exactly one argument"
+	local to_test="${1}"
+	local gui_apps=("firefox" "wezterm")
+	for app in "${gui_apps[@]}"; do
+		if [[ "${app}" == "${to_test}" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+install() {
+	[[ $# -ne 1 ]] && echo "install function requires exactly one argument"
+	[[ $# -ne 1 ]] && exit 1
+	local package="${1}"
+	case "${os}" in
+	macos)
+		if is_gui "${package}"; then
+			brew install --cask "${package}"
+		else
+			brew install "${package}"
+		fi
+		;;
+	debianlike)
+		sudo apt-get install -y "${package}"
+		;;
+	arch)
+		sudo pacman -Sy --noconfirm "${package}"
+		;;
+	esac
+}
