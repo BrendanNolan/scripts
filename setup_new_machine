@@ -38,12 +38,25 @@ esac
 
 [[ -z "${os+x}" ]] && bail "Unrecognised OS"
 [[ "${os}" == debianlike ]] && sudo apt-get update -y
+if [[ "${os}" == macos ]]; then
+	brew_install_script
+	brew_install_script=$(mktemp)
+    if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
+		/bin/sh "${brew_install_script}"
+	else
+		bail "Failed to install homebrew"
+	fi
+	unset brew_install_script
+fi
 
 install_rust_toolchain_and_cargo_binstall() {
 	local rustup_install_script
 	rustup_install_script=$(mktemp)
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"
-	sh "${rustup_install_script}" -y
+	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
+	    sh "${rustup_install_script}" -y
+	else
+		bail "Faile to install rustup"
+	fi
 	local cargo_binstall_install_script
 	cargo_binstall_install_script=$(mktemp)
 	if curl -L --proto '=https' --tlsv1.2 -sSf \
@@ -61,6 +74,17 @@ cargo install cargo-update
 cargo install sccache
 cargo install tokio-console
 cargo install tree-sitter-cli
+
+install_macos_only_stuff() {
+	brew install gh # Installing on linux is not straightforward and is best done manually
+	brew install --cask aerospace
+	brew install --cask font-fira-code
+}
+install_macos_only_stuff
+
+install_linux_only_stuff() {
+	sudo pacman -Syu nerd-fonts-fira-code
+}
 
 install() {
 	local is_gui=false
@@ -94,12 +118,41 @@ install() {
 		sudo apt-get install -y "${package}"
 		;;
 	arch)
-		sudo pacman -Sy --noconfirm "${package}"
+		sudo pacman -Syu --noconfirm "${package}"
 		;;
 	esac
 }
 
 install --gui wezterm
 install --gui chrome
+install bash
+install bat
+install broot
+install cloc
+install eza
+install fd
+install fish
+install flamegraph
+install fzf
 install git
+install gitleaks
+install grep
+install ncdu
 install neovim
+install node
+install pandoc
+install parallel
+install ripgrep
+install sd
+install shellcheck
+install shfmt
+install sponge
+install starship
+install stow
+install tldr
+install tmux
+install yazi
+install zoxide
+install zsh
+
+npm install jquery
