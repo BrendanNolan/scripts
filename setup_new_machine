@@ -144,15 +144,15 @@ install_for_macos() {
 	brew tap 'homebrew-zathura/zathura'
 	brew tap 'homebrew/cask-fonts'
 	brew tap 'nikitabobko/tap'
-	brew install 'dlvhdr/formulae/diffnav'
-	brew install 'felixkratz/formulae/borders'
-	brew install 'homebrew-zathura/zathura/zathura'
-	brew install 'homebrew-zathura/zathura/zathura-pdf-poppler'
-	brew install gh # Installing on linux is not straightforward and is best done manually
-	brew install gnu-sed
-	brewinstall --cask aerospace
-	brewinstall --cask font-fira-code
-	brewinstall --cask mactex
+	install 'dlvhdr/formulae/diffnav'
+	install 'felixkratz/formulae/borders'
+	install 'homebrew-zathura/zathura/zathura'
+	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
+	install gh # Installing on linux is not straightforward and is best done manually
+	install gnu-sed
+	install --gui aerospace
+	install --gui font-fira-code
+	install --gui mactex
 }
 
 install_for_arch() {
