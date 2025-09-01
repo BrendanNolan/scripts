@@ -104,6 +104,7 @@ install stow
 install tldr
 install tmux
 install unzip
+install watch
 install yazi
 install zip
 install zoxide
@@ -138,13 +139,15 @@ cargo install tokio-console
 cargo install tree-sitter-cli
 
 install_for_macos() {
-	brew install gh # Installing on linux is not straightforward and is best done manually
-	brew install --cask aerospace
-	brew install --cask font-fira-code
+	install gh # Installing on linux is not straightforward and is best done manually
+	install gnu-sed
+	install --gui aerospace
+	install --gui font-fira-code
 }
 
 install_for_arch() {
-	sudo pacman -Syu nerd-fonts-fira-code
+	install nerd-fonts-fira-code
+	install github-cli
 }
 
 install_for_debian_like() {
@@ -155,3 +158,19 @@ install_for_debian_like() {
 	# Refresh font cache
 	fc-cache -fv
 }
+
+case "${os}" in
+	macos)
+		install_for_macos
+		;;
+	debianlike)
+	    install_for_debian_like
+        echo "You may want to manually install the github CLI using the instructions found here:"
+	    echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
+		;;
+	arch)
+		sudo pacman -Syu --noconfirm "${package}"
+		;;
+esac
+if [[ "${os}" == debianlike ]]; then
+fi
