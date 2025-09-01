@@ -55,8 +55,7 @@ install() {
 			;;
 		esac
 	done
-	[[ $# -ne 1 ]] && echo "Usage: install [--gui] package_name"
-	[[ $# -ne 1 ]] && exit 1
+	[[ $# == 1 ]] || bail "Usage: install [--gui] package_name"
 	local package="${1}"
 	case "${os}" in
 	macos)
