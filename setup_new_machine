@@ -139,10 +139,20 @@ cargo install tokio-console
 cargo install tree-sitter-cli
 
 install_for_macos() {
-	install gh # Installing on linux is not straightforward and is best done manually
-	install gnu-sed
-	install --gui aerospace
-	install --gui font-fira-code
+	brew tap 'dlvhdr/formulae'
+	brew tap 'felixkratz/formulae'
+	brew tap 'homebrew-zathura/zathura'
+	brew tap 'homebrew/cask-fonts'
+	brew tap 'nikitabobko/tap'
+	brew install 'dlvhdr/formulae/diffnav'
+	brew install 'felixkratz/formulae/borders'
+	brew install 'homebrew-zathura/zathura/zathura'
+	brew install 'homebrew-zathura/zathura/zathura-pdf-poppler'
+	brew install gh # Installing on linux is not straightforward and is best done manually
+	brew install gnu-sed
+	brewinstall --cask aerospace
+	brewinstall --cask font-fira-code
+	brewinstall --cask mactex
 }
 
 install_for_arch() {
@@ -160,17 +170,15 @@ install_for_debian_like() {
 }
 
 case "${os}" in
-	macos)
-		install_for_macos
-		;;
-	debianlike)
-	    install_for_debian_like
-        echo "You may want to manually install the github CLI using the instructions found here:"
-	    echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
-		;;
-	arch)
-		sudo pacman -Syu --noconfirm "${package}"
-		;;
+macos)
+	install_for_macos
+	;;
+debianlike)
+	install_for_debian_like
+	echo "You may want to manually install the github CLI using the instructions found here:"
+	echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
+	;;
+arch)
+	install_for_arch
+	;;
 esac
-if [[ "${os}" == debianlike ]]; then
-fi
