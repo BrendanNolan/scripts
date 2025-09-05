@@ -84,6 +84,7 @@ install eza
 install fd
 install fish
 install flamegraph
+install fontconfig
 install fzf
 install git
 install gitleaks
