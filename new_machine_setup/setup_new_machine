@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Do not run with sudo - you will be prompted for sudo the first time it is needed and then it
+# will remain valid for a few minutes while the rest of the installation proceeds
+
 bail() {
 	echo "${1}"
 	exit 1
