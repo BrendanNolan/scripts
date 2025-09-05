@@ -99,7 +99,6 @@ install sd
 install shellcheck
 install shfmt
 install sponge
-install starship
 install stow
 install tldr
 install tmux
@@ -111,32 +110,6 @@ install zoxide
 install zsh
 
 npm install jquery
-
-install_rust_toolchain_and_cargo_binstall() {
-	local rustup_install_script
-	rustup_install_script=$(mktemp)
-	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
-		sh "${rustup_install_script}"
-	else
-		bail "Faile to install rustup"
-	fi
-	local cargo_binstall_install_script
-	cargo_binstall_install_script=$(mktemp)
-	if curl -L --proto '=https' --tlsv1.2 -sSf \
-		https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
-		>"${cargo_binstall_install_script}"; then
-		bash "${cargo_binstall_install_script}"
-	else
-		bail "Failed to install cargo-binstall"
-	fi
-}
-
-install_rust_toolchain_and_cargo_binstall
-cargo install cargo-shuttle
-cargo install cargo-update
-cargo install sccache
-cargo install tokio-console
-cargo install tree-sitter-cli
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
@@ -158,16 +131,18 @@ install_for_macos() {
 install_for_arch() {
 	install nerd-fonts-fira-code
 	install github-cli
+	install base-devel
 }
 
 install_for_debian_like() {
+	install build-essential
 	# Download the latest FiraCode Nerd Font release
 	pushd /tmp || return 1
 	wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
 	unzip FiraCode.zip -d "${HOME}/local/share/fonts"
 	# Refresh font cache
 	fc-cache -fv
-	popd ||	return 1
+	popd || return 1
 }
 
 case "${os}" in
@@ -183,3 +158,32 @@ arch)
 	install_for_arch
 	;;
 esac
+
+install_rust_toolchain_and_cargo_binstall() {
+	local rustup_install_script
+	rustup_install_script=$(mktemp)
+	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
+		sh "${rustup_install_script}" -y || bail "Failed to install rustup"
+	else
+		bail "Failed to install rustup"
+	fi
+	local cargo_binstall_install_script
+	cargo_binstall_install_script=$(mktemp)
+	if curl -L --proto '=https' --tlsv1.2 -sSf \
+		https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
+		>"${cargo_binstall_install_script}"; then
+		bash "${cargo_binstall_install_script}" || bail "Failed to install cargo-binstall"
+	else
+		bail "Failed to install cargo-binstall"
+	fi
+}
+
+install_rust_toolchain_and_cargo_binstall
+cargo install cargo-shuttle
+cargo install cargo-update
+cargo install sccache
+cargo install tokio-console
+cargo install tree-sitter-cli
+cargo install starship
+
+echo "It is probably now time to add your public SSH key github and install your scripts and then your dotfiles"
