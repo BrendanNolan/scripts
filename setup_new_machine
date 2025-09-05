@@ -66,7 +66,7 @@ install() {
 		fi
 		;;
 	debianlike)
-		sudo apt-get install "${package}"
+		sudo apt-get install -y "${package}"
 		;;
 	arch)
 		sudo pacman -Syu --noconfirm "${package}"
@@ -167,6 +167,7 @@ install_for_debian_like() {
 	unzip FiraCode.zip -d "${HOME}/local/share/fonts"
 	# Refresh font cache
 	fc-cache -fv
+	popd ||	return 1
 }
 
 case "${os}" in
