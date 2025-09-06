@@ -3,6 +3,8 @@
 # Do not run with sudo - you will be prompted for sudo the first time it is needed and then it
 # will remain valid for a few minutes while the rest of the installation proceeds
 
+set -euo pipefail
+
 bail() {
 	echo "${1}"
 	exit 1
@@ -17,8 +19,11 @@ Linux)
 	if [[ -f /etc/os-release ]]; then
 		os_release_file="/etc/os-release"
 		grep -iqE "ubuntu|debian|arch" "${os_release_file}" || bail "Unrecognised linux distro"
-		grep -iqE "ubuntu|debian" "${os_release_file}" && os=debianlike
-		grep -iq "arch" "${os_release_file}" && os=arch
+		if grep -iqE "ubuntu|debian" "${os_release_file}"; then
+			os=debianlike
+		elif grep -iq "arch" "${os_release_file}"; then
+			os=arch
+		fi
 	else
 		bail "Unrecognised Linux distro"
 	fi
@@ -28,10 +33,13 @@ Linux)
 	;;
 esac
 
-[[ -z "${os+x}" ]] && bail "Unrecognised OS"
-[[ "${os}" == debianlike ]] && sudo apt-get update
+if [[ -z "${os+x}" ]]; then
+	bail "Unrecognised OS"
+fi
+if [[ "${os}" == debianlike ]]; then
+	sudo apt-get update
+fi
 if [[ "${os}" == macos ]]; then
-	brew_install_script
 	brew_install_script=$(mktemp)
 	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
 		/bin/sh "${brew_install_script}"
@@ -77,6 +85,15 @@ install() {
 	esac
 }
 
+install git
+rm -f "${HOME}/.bashrc"
+rm -f "${HOME}/.zshrc"
+rm -f "${HOME}/.config"
+mkdir -p "${HOME}/dev" || exit 1
+git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
+git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
+"${HOME}/dev/scripts/reload_dotfiles"
+
 install --gui wezterm
 install --gui chrome
 install bash
@@ -89,7 +106,6 @@ install fish
 install flamegraph
 install fontconfig
 install fzf
-install git
 install gitleaks
 install grep
 install ncdu

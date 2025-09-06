@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-rm -f "${HOME}/.bashrc"
-rm -f "${HOME}/.zshrc"
-rm -f "${HOME}/.config"
-mkdir -p "${HOME}/dev" || exit 1
-git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
-git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
