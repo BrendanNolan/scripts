@@ -208,5 +208,3 @@ cargo install sccache
 cargo install tokio-console
 cargo install tree-sitter-cli
 cargo install starship
-
-echo "It is probably now time to add your public SSH key github and install your scripts and then your dotfiles"
