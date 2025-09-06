@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ "$#" -ne 1 ]]; then
+	echo "Usage: user_setup user_name"
+	exit 1
+fi
+
+new_user="${1}"
+sudo adduser "${new_user}"
+sudo usermod -aG sudo "${new_user}"
+echo "Now login as ${new_user}"
