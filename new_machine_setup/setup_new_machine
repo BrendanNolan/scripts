@@ -14,6 +14,10 @@ if [[ "$(id -u)" -eq 0 ]]; then
 	bail "Do not run this script as root"
 fi
 
+if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
+	bail "Setup up your ssh keys"
+fi
+
 os=""
 case "$(uname -s)" in
 Darwin)
