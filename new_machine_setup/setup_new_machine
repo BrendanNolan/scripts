@@ -102,7 +102,6 @@ git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
 git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
 "${HOME}/dev/scripts/reload_dotfiles"
 
-install --gui wezterm
 install --gui chrome
 install bash
 install bat
@@ -153,12 +152,14 @@ install_for_macos() {
 	install --gui aerospace
 	install --gui font-fira-code
 	install --gui mactex
+	install --gui wezterm
 }
 
 install_for_arch() {
 	install nerd-fonts-fira-code
 	install github-cli
 	install base-devel
+	install --gui wezterm
 }
 
 install_for_debian_like() {
@@ -180,6 +181,8 @@ debianlike)
 	install_for_debian_like
 	echo "You may want to manually install the github CLI using the instructions found here:"
 	echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
+	echo
+	echo "You may also want to look into installing wezterm manually"
 	;;
 arch)
 	install_for_arch
