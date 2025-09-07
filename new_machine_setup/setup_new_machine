@@ -105,7 +105,6 @@ install flamegraph
 install fontconfig
 install fzf
 install git
-install gitleaks
 install grep
 install ncdu
 install neovim
@@ -114,7 +113,6 @@ install pandoc
 install parallel
 install ripgrep
 install shellcheck
-install shfmt
 install sponge
 install stow
 install tmux
@@ -210,8 +208,10 @@ cargo install broot
 cargo install cargo-shuttle
 cargo install cargo-update
 cargo install eza
+cargo install gitleaks
 cargo install sccache
 cargo install sd
+cargo install shfmt
 cargo install tokio-console
 cargo install tree-sitter-cli
 cargo install starship
