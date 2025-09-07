@@ -93,15 +93,6 @@ install() {
 	esac
 }
 
-install git
-rm -f "${HOME}/.bashrc"
-rm -f "${HOME}/.zshrc"
-rm -f "${HOME}/.config"
-mkdir -p "${HOME}/dev" || exit 1
-git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
-git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
-"${HOME}/dev/scripts/reload_dotfiles"
-
 install --gui chrome
 install bash
 install bat
@@ -113,6 +104,7 @@ install fish
 install flamegraph
 install fontconfig
 install fzf
+install git
 install gitleaks
 install grep
 install ncdu
@@ -136,6 +128,14 @@ install zoxide
 install zsh
 
 npm install jquery
+
+rm -f "${HOME}/.bashrc"
+rm -f "${HOME}/.zshrc"
+rm -f "${HOME}/.config"
+mkdir -p "${HOME}/dev" || exit 1
+git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
+git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
+"${HOME}/dev/scripts/reload_dotfiles"
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
