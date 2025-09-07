@@ -104,6 +104,7 @@ install fontconfig
 install fzf
 install git
 install grep
+install moreutils
 install ncdu
 install neovim
 install node
@@ -111,7 +112,6 @@ install pandoc
 install parallel
 install ripgrep
 install shellcheck
-install sponge
 install stow
 install tmux
 install unzip
