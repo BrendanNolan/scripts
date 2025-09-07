@@ -85,6 +85,9 @@ install() {
 		fi
 		;;
 	debianlike)
+		if [[ "${package}" == node ]]; then
+			package=nodejs
+		fi
 		sudo apt-get install -y "${package}"
 		;;
 	arch)
