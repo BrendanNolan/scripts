@@ -176,7 +176,7 @@ debianlike)
 	echo "You may want to manually install the github CLI using the instructions found here:"
 	echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
 	echo
-	echo "You may also want to look into installing wezterm manually"
+	echo "You may also want to look into installing wezterm and chrome manually"
 	;;
 arch)
 	install_for_arch
