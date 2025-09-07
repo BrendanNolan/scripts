@@ -100,7 +100,6 @@ install bash
 install bat
 install cloc
 install fish
-install flamegraph
 install fontconfig
 install fzf
 install git
@@ -208,6 +207,7 @@ cargo install cargo-shuttle
 cargo install cargo-update
 cargo install eza
 cargo install fd
+cargo install flamegraph
 cargo install gitleaks
 cargo install sccache
 cargo install sd
