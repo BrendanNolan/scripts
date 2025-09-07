@@ -93,12 +93,9 @@ install() {
 	esac
 }
 
-install --gui chrome
 install bash
 install bat
-install broot
 install cloc
-install eza
 install fd
 install fish
 install flamegraph
@@ -113,21 +110,18 @@ install node
 install pandoc
 install parallel
 install ripgrep
-install sd
 install shellcheck
 install shfmt
 install sponge
 install stow
-install tldr
 install tmux
 install unzip
 install watch
-install yazi
 install zip
-install zoxide
 install zsh
 
 npm install jquery
+npm install tldr
 
 rm -f "${HOME}/.bashrc"
 rm -f "${HOME}/.zshrc"
@@ -209,9 +203,14 @@ install_rust_toolchain_and_cargo_binstall() {
 }
 
 install_rust_toolchain_and_cargo_binstall
+cargo install broot
 cargo install cargo-shuttle
 cargo install cargo-update
+cargo install eza
 cargo install sccache
+cargo install sd
 cargo install tokio-console
 cargo install tree-sitter-cli
 cargo install starship
+cargo install yazi
+cargo install zoxide
