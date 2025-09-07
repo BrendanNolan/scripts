@@ -99,7 +99,6 @@ install() {
 install bash
 install bat
 install cloc
-install fd
 install fish
 install flamegraph
 install fontconfig
@@ -208,6 +207,7 @@ cargo install broot
 cargo install cargo-shuttle
 cargo install cargo-update
 cargo install eza
+cargo install fd
 cargo install gitleaks
 cargo install sccache
 cargo install sd
