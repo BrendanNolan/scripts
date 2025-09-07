@@ -108,6 +108,7 @@ install moreutils
 install ncdu
 install neovim
 install node
+install npm
 install pandoc
 install parallel
 install ripgrep
