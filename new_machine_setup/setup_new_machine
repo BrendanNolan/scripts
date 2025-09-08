@@ -192,6 +192,7 @@ install_rust_toolchain_and_sccache_and_cargo_binstall() {
 	fi
 	# Installing sccache here because cargo-binstall needs it
 	cargo install sccache
+	source "${HOME}/.bash_profile"
 	local cargo_binstall_install_script
 	cargo_binstall_install_script=$(mktemp)
 	if curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh >"${cargo_binstall_install_script}"; then
