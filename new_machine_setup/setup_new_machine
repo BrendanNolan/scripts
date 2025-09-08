@@ -86,7 +86,7 @@ install() {
 	local package="${1}"
 	case "${os}" in
 	macos)
-		if "${is_gui}"; then
+		if [[ "${is_gui}" == true ]]; then
 			brew install --cask "${package}"
 		else
 			brew install "${package}"
@@ -126,6 +126,7 @@ install zoxide
 install zsh
 
 rm -f "${HOME}/.bashrc"
+rm -f "${HOME}/.bash_profile"
 rm -f "${HOME}/.zshrc"
 rm -f "${HOME}/.config"
 mkdir -p "${HOME}/dev" || exit 1
@@ -186,9 +187,7 @@ install_rust_toolchain_and_cargo_binstall() {
 	fi
 	local cargo_binstall_install_script
 	cargo_binstall_install_script=$(mktemp)
-	if curl -L --proto '=https' --tlsv1.2 -sSf \
-		https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
-		>"${cargo_binstall_install_script}"; then
+	if curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh >"${cargo_binstall_install_script}"; then
 		bash "${cargo_binstall_install_script}" || bail "Failed to install cargo-binstall"
 	else
 		bail "Failed to install cargo-binstall"
