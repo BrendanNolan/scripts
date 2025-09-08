@@ -5,7 +5,18 @@ if [[ "$#" -ne 1 ]]; then
 	exit 1
 fi
 
+if [[ ! -f /etc/os-release ]]; then
+	echo "Works on Arch only"
+	exit 1
+fi
+
+if ! grep -iq "arch" "/etc/os-release"; then
+	echo "Works on Arch only"
+	exit 1
+fi
+
 new_user="${1}"
-sudo adduser "${new_user}"
-sudo usermod -aG sudo "${new_user}"
-echo "Now login as ${new_user}"
+sudo useradd -m -G wheel -s /bin/bash "${new_user}"
+sudo passwd "${new_user}"
+echo "Logging in as ${new_user}"
+su - "${new_user}"
