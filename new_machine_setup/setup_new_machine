@@ -26,8 +26,8 @@ Darwin)
 Linux)
 	if [[ -f /etc/os-release ]]; then
 		os_release_file="/etc/os-release"
-		if grep -iq "arch" "${os_release_file}"; then
-			os=arch
+		if grep -iq '^ID=fedora$' "${os_release_file}"; then
+			os=fedora
 		fi
 	else
 		bail "Unrecognised Linux distro"
@@ -50,6 +50,20 @@ if [[ "${os}" == macos ]]; then
 	fi
 	unset brew_install_script
 fi
+
+update_package_manager() {
+	case "${os}" in
+	macos)
+		brew update
+		brew upgrade
+		brew clean
+		;;
+	fedora)
+		sudo dnf makecache -y
+		;;
+	esac
+}
+update_package_manager
 
 install() {
 	local is_gui=false
@@ -78,8 +92,8 @@ install() {
 			brew install "${package}"
 		fi
 		;;
-	arch)
-		sudo pacman -Syu --noconfirm "${package}"
+	fedora)
+		sudo dnf install -y "${package}"
 		;;
 	esac
 }
@@ -188,7 +202,7 @@ case "${os}" in
 macos)
 	install_for_macos
 	;;
-arch)
+fedora)
 	install_for_arch
 	;;
 esac
