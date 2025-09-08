@@ -26,10 +26,7 @@ Darwin)
 Linux)
 	if [[ -f /etc/os-release ]]; then
 		os_release_file="/etc/os-release"
-		grep -iqE "ubuntu|debian|arch" "${os_release_file}" || bail "Unrecognised linux distro"
-		if grep -iqE "ubuntu|debian" "${os_release_file}"; then
-			os=debianlike
-		elif grep -iq "arch" "${os_release_file}"; then
+		if grep -iq "arch" "${os_release_file}"; then
 			os=arch
 		fi
 	else
@@ -43,9 +40,6 @@ esac
 
 if [[ -z "${os+x}" ]]; then
 	bail "Unrecognised OS"
-fi
-if [[ "${os}" == debianlike ]]; then
-	sudo apt-get update
 fi
 if [[ "${os}" == macos ]]; then
 	brew_install_script=$(mktemp)
@@ -83,12 +77,6 @@ install() {
 		else
 			brew install "${package}"
 		fi
-		;;
-	debianlike)
-		if [[ "${package}" == node ]]; then
-			package=nodejs
-		fi
-		sudo apt-get install -y "${package}"
 		;;
 	arch)
 		sudo pacman -Syu --noconfirm "${package}"
@@ -156,27 +144,9 @@ install_for_arch() {
 	install --gui wezterm
 }
 
-install_for_debian_like() {
-	install build-essential
-	# Download the latest FiraCode Nerd Font release
-	pushd /tmp || return 1
-	wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
-	unzip FiraCode.zip -d "${HOME}/local/share/fonts"
-	# Refresh font cache
-	fc-cache -fv
-	popd || return 1
-}
-
 case "${os}" in
 macos)
 	install_for_macos
-	;;
-debianlike)
-	install_for_debian_like
-	echo "You may want to manually install the github CLI using the instructions found here:"
-	echo "https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian"
-	echo
-	echo "You may also want to look into installing wezterm and chrome manually"
 	;;
 arch)
 	install_for_arch
