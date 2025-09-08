@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+packages=("bash" "bat" "cloc" "fish" "fontconfig" "fzf" "git" "grep" "moreutils" "ncdu" "neovim" "node" "npm" "pandoc" "parallel" "ripgrep" "shellcheck" "stow" "tmux" "unzip" "watch" "zip" "zsh")
+for package in "${packages[@]}"; do
+    if ! package_checker "${package}"; then
+        echo "${package} not available"
+    fi
+done
