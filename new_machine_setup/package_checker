@@ -15,7 +15,7 @@ Linux)
 	if [[ -f /etc/os-release ]]; then
 		os_release_file="/etc/os-release"
 		if grep -iq '^ID=fedora$' "${os_release_file}"; then
-			dnf list available "^${package}$" >/dev/null 2>&1
+			dnf list available "${package}" >/dev/null 2>&1
 		else
 			bail "Unrecognised linux distro"
 		fi

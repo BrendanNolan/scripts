@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [[ "$#" -ne 1 ]]; then
 	echo "Usage: user_setup user_name"
 	exit 1
 fi
 
 if [[ ! -f /etc/os-release ]]; then
-	echo "Works on Arch only"
+	echo "Works on Fedora only"
 	exit 1
 fi
 
-if ! grep -iq "arch" "/etc/os-release"; then
-	echo "Works on Arch only"
+if ! grep -iq '^ID=fedora$' "/etc/os-release"; then
+	echo "Works on Fedora only"
 	exit 1
 fi
 
