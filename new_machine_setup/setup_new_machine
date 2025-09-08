@@ -156,7 +156,7 @@ install_for_macos() {
 }
 
 install_for_fedora() {
-	install base-devel
+	sudo dnf groupinstall -y "Development Tools" "Development Libraries"
 	install github-cli
 	install nerd-fonts-fira-code
 	install nodejs
