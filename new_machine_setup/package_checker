@@ -4,13 +4,13 @@ package="$1"
 
 case "$(uname -s)" in
 Darwin)
-	brew search "${package}" > /dev/null 2>&1
+	brew search "/^${package}$/" >/dev/null 2>&1
 	;;
 Linux)
 	if [[ -f /etc/os-release ]]; then
 		os_release_file="/etc/os-release"
 		if grep -iq "arch" "${os_release_file}"; then
-			pacman -Ss "${package}" > /dev/null 2>&1
+			pacman -Ss "^${package}$" >/dev/null 2>&1
 		fi
 	else
 		echo "Unrecognised Linux distro"
@@ -22,4 +22,3 @@ Linux)
 	exit 1
 	;;
 esac
-

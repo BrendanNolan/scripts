@@ -1,8 +1,46 @@
 #!/usr/bin/env bash
 
-packages=("bash" "bat" "cloc" "fish" "fontconfig" "fzf" "git" "grep" "moreutils" "ncdu" "neovim" "node" "npm" "pandoc" "parallel" "ripgrep" "shellcheck" "stow" "tmux" "unzip" "watch" "zip" "zsh")
+packages=(
+	"bash"
+	"bat"
+	"broot"
+	"cargo-shuttle"
+	"cargo-update"
+	"cloc"
+	"eza"
+	"fd"
+	"fish"
+	"flamegraph"
+	"fontconfig"
+	"fzf"
+	"git"
+	"gitleaks"
+	"grep"
+	"moreutils"
+	"ncdu"
+	"neovim"
+	"node"
+	"npm"
+	"pandoc"
+	"parallel"
+	"ripgrep"
+	"sccache"
+	"sd"
+	"shellcheck"
+	"shfmt"
+	"starship"
+	"stow"
+	"tmux"
+	"tokio-console"
+	"tree-sitter-cli"
+	"unzip"
+	"watch"
+	"yazi"
+	"zip"
+	"zoxide"
+	"zsh")
 for package in "${packages[@]}"; do
-    if ! package_checker "${package}"; then
-        echo "${package} not available"
-    fi
+	if ! package_checker "${package}"; then
+		echo "${package} not available"
+	fi
 done
