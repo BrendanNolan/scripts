@@ -156,9 +156,15 @@ install_for_macos() {
 }
 
 install_for_fedora() {
-	sudo dnf groupinstall -y "Development Tools" "Development Libraries"
-	install github-cli
-	install nerd-fonts-fira-code
+	install '@c-development'
+	install '@development-tools'
+
+	# github cli
+	sudo dnf install -y dnf5-plugins
+	# sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+	sudo dnf install -y gh --repo gh-cli
+
+	install fira-code-fonts
 	install nodejs
 	install procps-ng
 	install util-linux
