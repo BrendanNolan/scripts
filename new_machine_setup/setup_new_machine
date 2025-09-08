@@ -152,7 +152,6 @@ install_for_macos() {
 	install --gui aerospace
 	install --gui font-fira-code
 	install --gui mactex
-	install --gui wezterm
 }
 
 install_for_fedora() {
@@ -168,7 +167,6 @@ install_for_fedora() {
 	install nodejs
 	install procps-ng
 	install util-linux
-	install wezterm
 }
 
 case "${os}" in
@@ -208,4 +206,5 @@ cargo install flamegraph
 cargo install sccache
 cargo install starship
 cargo install tokio-console
+cargo install wezterm
 cargo install yazi
