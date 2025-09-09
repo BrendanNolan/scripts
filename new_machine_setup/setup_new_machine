@@ -43,35 +43,6 @@ if [[ "${os}" == macos ]]; then
 	unset brew_install_script
 fi
 
-the_user=''
-setup_user_and_ssh() {
-	if [[ "${os}" == fedora ]]; then
-		while [[ -z "$the_user" ]]; do
-			echo "Please enter the name of the user you wish to set up"
-			read -r the_user
-		done
-		if ! id -u "${the_user}" >/dev/null 2>&1; then
-			sudo useradd -m -G wheel -s /bin/bash "${the_user}"
-			sudo passwd "${the_user}"
-		fi
-		echo "Logging in as ${the_user}"
-		su - "${the_user}"
-	fi
-	if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
-		email_address=''
-		while [[ -z "${email_address}" ]]; do
-			echo "Please enter your email for your new ssh key:"
-			read -r email_address
-		done
-		ssh-keygen -t ed25519 -C "${email_address}"
-		echo "Add this key to github now; press any key to continue when you are done"
-		cat "${HOME}/.ssh/id_ed25519.pub"
-		read -n 1 -s -r
-		echo
-	fi
-}
-setup_user_and_ssh
-
 update_package_manager() {
 	case "${os}" in
 	macos)
@@ -231,5 +202,3 @@ cargo install starship
 cargo install tokio-console
 cargo install wezterm
 cargo install yazi
-
-echo "You many now wish to login as ${the_user}"
