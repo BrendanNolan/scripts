@@ -173,7 +173,7 @@ install_for_fedora() {
 
 	# github cli
 	sudo dnf install -y dnf5-plugins
-	# sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+	sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
 	sudo dnf install -y gh --repo gh-cli
 
 	install fira-code-fonts
