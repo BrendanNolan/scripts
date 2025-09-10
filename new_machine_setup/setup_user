@@ -54,8 +54,7 @@ setup_user() {
 			sudo useradd -m -G wheel -s /bin/bash "${the_user}"
 			sudo passwd "${the_user}"
 		fi
-		echo "Logging in as ${the_user}"
-		su - "${the_user}"
+		echo "Please login as ${the_user}"
 	fi
 }
 setup_user
