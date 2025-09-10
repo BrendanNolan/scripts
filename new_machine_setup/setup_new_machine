@@ -202,6 +202,7 @@ install_rust_toolchain_and_sccache_and_cargo_binstall() {
 	else
 		bail "Failed to install rustup"
 	fi
+	source "${HOME}/.bash_profile"
 	# Installing sccache here because cargo-binstall needs it
 	cargo install sccache
 	local cargo_binstall_install_script
