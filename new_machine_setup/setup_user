@@ -55,7 +55,7 @@ setup_user() {
 			sudo passwd "${the_user}"
 		fi
 		echo
-		echo "Now please login as ${the_user}"
+		echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
 	fi
 }
 setup_user
