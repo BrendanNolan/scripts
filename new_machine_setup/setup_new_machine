@@ -22,12 +22,11 @@ setup_ssh() {
 			read -r email_address </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
 		done
 		ssh-keygen -t ed25519 -C "${email_address}"
-		echo "Add this key to github now; press any key to continue when you are done"
-		cat "${HOME}/.ssh/id_ed25519.pub"
-		read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
-
-		echo
 	fi
+	echo "Add this key to github now; press any key to continue when you are done"
+	cat "${HOME}/.ssh/id_ed25519.pub"
+	read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
+	echo
 }
 setup_ssh
 
