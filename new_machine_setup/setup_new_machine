@@ -194,6 +194,8 @@ esac
 npm install jquery
 npm install tldr
 
+# Unsetting RUSTC_WRAPPER just while we do the initial cargo installs
+unset RUSTC_WRAPPER
 install_rust_toolchain_and_sccache_and_cargo_binstall() {
 	local rustup_install_script
 	rustup_install_script=$(mktemp)
@@ -202,7 +204,6 @@ install_rust_toolchain_and_sccache_and_cargo_binstall() {
 	else
 		bail "Failed to install rustup"
 	fi
-	source "${HOME}/.bash_profile"
 	# Installing sccache here because cargo-binstall needs it
 	cargo install sccache
 	local cargo_binstall_install_script
@@ -223,3 +224,6 @@ cargo install starship
 cargo install tokio-console
 cargo install wezterm
 cargo install yazi
+
+# Set up env again, just in case this script was run via source (though it shouldn't be)
+source "${HOME}/.bash_profile"
