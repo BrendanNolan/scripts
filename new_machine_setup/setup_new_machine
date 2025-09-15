@@ -165,6 +165,7 @@ install_for_macos() {
 	install --gui aerospace
 	install --gui font-fira-code
 	install --gui mactex
+	install --gui wezterm
 }
 
 install_for_fedora() {
@@ -218,12 +219,19 @@ install_rust_toolchain_and_sccache_and_cargo_binstall
 cargo install broot
 cargo install cargo-shuttle
 cargo install cargo-update
-cargo install fd
+cargo install fd-find
 cargo install flamegraph
 cargo install starship
 cargo install tokio-console
-cargo install wezterm
-cargo install yazi
+cargo install --force yazi-build
 
 # Set up env again, just in case this script was run via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
+
+case "${os}" in
+macos)
+	;;
+fedora)
+	echo "You may want to try to install wezterm manually now"
+	;;
+esac
