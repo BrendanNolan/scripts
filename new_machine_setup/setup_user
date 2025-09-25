@@ -10,30 +10,8 @@ bail() {
 	exit 1
 }
 
-os=""
 case "$(uname -s)" in
 Darwin)
-	os=macos
-	;;
-Linux)
-	if [[ -f /etc/os-release ]]; then
-		os_release_file="/etc/os-release"
-		if grep -iq '^ID=fedora$' "${os_release_file}"; then
-			os=fedora
-		fi
-	else
-		bail "Unrecognised Linux distro"
-	fi
-	;;
-*)
-	bail "Unrecognised OS"
-	;;
-esac
-
-if [[ -z "${os+x}" ]]; then
-	bail "Unrecognised OS"
-fi
-if [[ "${os}" == macos ]]; then
 	brew_install_script=$(mktemp)
 	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
 		/bin/sh "${brew_install_script}"
@@ -41,21 +19,21 @@ if [[ "${os}" == macos ]]; then
 		bail "Failed to install homebrew"
 	fi
 	unset brew_install_script
-fi
-
-the_user=''
-setup_user() {
-	if [[ "${os}" == fedora ]]; then
-		while [[ -z "$the_user" ]]; do
-			echo "Please enter the name of the user you wish to set up"
-			read -r the_user </dev/tty
-		done
-		if ! id -u "${the_user}" >/dev/null 2>&1; then
-			sudo useradd -m -G wheel -s /bin/bash "${the_user}"
-			sudo passwd "${the_user}"
-		fi
-		echo
-		echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
+	;;
+Linux)
+	the_user=''
+	while [[ -z "$the_user" ]]; do
+		echo "Please enter the name of the user you wish to set up"
+		read -r the_user </dev/tty
+	done
+	if ! id -u "${the_user}" >/dev/null 2>&1; then
+		sudo useradd -m -G wheel -s /bin/bash "${the_user}"
+		sudo passwd "${the_user}"
 	fi
-}
-setup_user
+	echo
+	echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
+	;;
+*)
+	bail "Unrecognised OS"
+	;;
+esac

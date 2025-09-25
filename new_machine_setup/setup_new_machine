@@ -229,8 +229,7 @@ cargo install --force yazi-build
 source "${HOME}/.bash_profile"
 
 case "${os}" in
-macos)
-	;;
+macos) ;;
 fedora)
 	echo "You may want to try to install wezterm manually now"
 	;;
