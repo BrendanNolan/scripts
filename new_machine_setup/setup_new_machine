@@ -77,6 +77,9 @@ update_package_manager() {
 		;;
 	debianlike)
 		sudo apt-get update
+		sudo apt-get install -y snapd
+		sudo systemctl enable --now snapd # Enable and start the snapd daemon
+		;;
 	esac
 }
 update_package_manager
@@ -112,7 +115,15 @@ install() {
 		sudo dnf install -y "${package}"
 		;;
 	debianlike)
-		sudo apt-get install -y "${package}"
+		if apt-cache show "${package}" >/dev/null 2>&1; then
+			sudo apt-get install -y "${package}"
+		else
+			if snap find "${package}" | grep -q "^${package} "; then
+				sudo snap install "${package}"
+			else
+				bail "Error: ${package} not available in apt or snap"
+			fi
+		fi
 		;;
 	esac
 }
@@ -188,14 +199,14 @@ install_for_fedora() {
 }
 
 install_for_debianlike() {
-	install snapd # This needs to be at the top
-	sudo snap install gh
-    sudo snap install gitleaks
-	sudo snap install shfmt
 	install build-essential
 	install fonts-firacode
-	install nodejs npm
+	install gh
+	install gitleaks
+	install nodejs
+	install npm
 	install procps
+	install shfmt
 	install util-linux
 }
 
