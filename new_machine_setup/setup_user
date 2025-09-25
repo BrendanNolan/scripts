@@ -11,15 +11,7 @@ bail() {
 }
 
 case "$(uname -s)" in
-Darwin)
-	brew_install_script=$(mktemp)
-	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
-		/bin/sh "${brew_install_script}"
-	else
-		bail "Failed to install homebrew"
-	fi
-	unset brew_install_script
-	;;
+Darwin) ;;
 Linux)
 	the_user=''
 	while [[ -z "$the_user" ]]; do

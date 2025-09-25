@@ -40,6 +40,8 @@ Linux)
 		os_release_file="/etc/os-release"
 		if grep -iq '^ID=fedora$' "${os_release_file}"; then
 			os=fedora
+		elif grep -iEq '^ID=(ubuntu|debian)$' "${os_release_file}"; then
+			os=debianlike
 		fi
 	else
 		bail "Unrecognised Linux distro"
@@ -73,6 +75,8 @@ update_package_manager() {
 	fedora)
 		sudo dnf makecache -y
 		;;
+	debianlike)
+		sudo apt-get update
 	esac
 }
 update_package_manager
@@ -107,18 +111,17 @@ install() {
 	fedora)
 		sudo dnf install -y "${package}"
 		;;
+	debianlike)
+		sudo apt-get install -y "${package}"
+		;;
 	esac
 }
 
-install bash
-install bat
 install cloc
-install eza
 install fish
 install fontconfig
 install fzf
 install git
-install gitleaks
 install grep
 install moreutils
 install ncdu
@@ -126,15 +129,11 @@ install neovim
 install pandoc
 install parallel
 install ripgrep
-install sd
 install shellcheck
-install shfmt
 install stow
 install tmux
-install tree-sitter-cli
 install unzip
 install zip
-install zoxide
 install zsh
 
 rm -f "${HOME}/.bashrc"
@@ -153,14 +152,17 @@ install_for_macos() {
 	brew tap 'homebrew-zathura/zathura'
 	brew tap 'homebrew/cask-fonts'
 	brew tap 'nikitabobko/tap'
+	install bash
 	install 'dlvhdr/formulae/diffnav'
 	install 'felixkratz/formulae/borders'
 	install gh
+	install gitleaks
 	install gnu-sed
 	install 'homebrew-zathura/zathura/zathura'
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
 	install node
 	install npm
+	install shfmt
 	install watch
 	install --gui aerospace
 	install --gui font-fira-code
@@ -178,8 +180,22 @@ install_for_fedora() {
 	sudo dnf install -y gh --repo gh-cli
 
 	install fira-code-fonts
+	install gitleaks
 	install nodejs
 	install procps-ng
+	install shfmt
+	install util-linux
+}
+
+install_for_debianlike() {
+	install snapd # This needs to be at the top
+	sudo snap install gh
+    sudo snap install gitleaks
+	sudo snap install shfmt
+	install build-essential
+	install fonts-firacode
+	install nodejs npm
+	install procps
 	install util-linux
 }
 
@@ -216,14 +232,19 @@ install_rust_toolchain_and_sccache_and_cargo_binstall() {
 	fi
 }
 install_rust_toolchain_and_sccache_and_cargo_binstall
+cargo install bat
 cargo install broot
 cargo install cargo-shuttle
 cargo install cargo-update
+cargo install eza
 cargo install fd-find
 cargo install flamegraph
+cargo install sd
 cargo install starship
 cargo install tokio-console
+cargo install tree-sitter-cli
 cargo install --force yazi-build
+cargo install zoxide
 
 # Set up env again, just in case this script was run via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
