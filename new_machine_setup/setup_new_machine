@@ -115,7 +115,7 @@ install() {
 		sudo dnf install -y "${package}"
 		;;
 	debianlike)
-		if apt-cache show "${package}" >/dev/null 2>&1; then
+		if apt search "${package}" >/dev/null 2>&1; then
 			sudo apt-get install -y "${package}"
 		else
 			if snap find "${package}" | grep -q "^${package} "; then
