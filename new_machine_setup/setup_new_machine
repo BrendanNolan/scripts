@@ -115,9 +115,7 @@ install() {
 		sudo dnf install -y "${package}"
 		;;
 	debianlike)
-		if [[ "${package}" == neovim ]]; then
-			sudo snap install --classic nvim
-		elif apt search "${package}" >/dev/null 2>&1; then
+		if apt search "${package}" >/dev/null 2>&1; then
 			sudo apt-get install -y "${package}"
 		else
 			if snap find "${package}" | grep -q "^${package} "; then
@@ -138,7 +136,6 @@ install git
 install grep
 install moreutils
 install ncdu
-install neovim
 install pandoc
 install parallel
 install ripgrep
@@ -173,6 +170,7 @@ install_for_macos() {
 	install gnu-sed
 	install 'homebrew-zathura/zathura/zathura'
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
+	install neovim
 	install node
 	install npm
 	install shfmt
@@ -194,6 +192,7 @@ install_for_fedora() {
 
 	install fira-code-fonts
 	install gitleaks
+	install neovim
 	install nodejs
 	install procps-ng
 	install shfmt
@@ -205,6 +204,7 @@ install_for_debianlike() {
 	install fonts-firacode
 	install gh
 	install gitleaks
+	sudo snap install nvim --classic
 	install nodejs
 	install npm
 	install procps
