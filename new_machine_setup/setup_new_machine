@@ -115,7 +115,9 @@ install() {
 		sudo dnf install -y "${package}"
 		;;
 	debianlike)
-		if apt search "${package}" >/dev/null 2>&1; then
+		if [[ "${package}" == neovim ]]; then
+			sudo snap install --classic nvim
+		elif apt search "${package}" >/dev/null 2>&1; then
 			sudo apt-get install -y "${package}"
 		else
 			if snap find "${package}" | grep -q "^${package} "; then
@@ -263,6 +265,9 @@ source "${HOME}/.bash_profile"
 case "${os}" in
 macos) ;;
 fedora)
+	echo "You may want to try to install wezterm manually now"
+	;;
+debianlike)
 	echo "You may want to try to install wezterm manually now"
 	;;
 esac
