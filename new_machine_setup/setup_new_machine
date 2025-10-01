@@ -219,6 +219,9 @@ macos)
 fedora)
 	install_for_fedora
 	;;
+debianlike)
+	install_for_debianlike
+	;;
 esac
 
 npm install jquery
