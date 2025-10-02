@@ -129,9 +129,12 @@ install() {
 }
 
 install cloc
+install cmake
+install curl
 install fish
 install fontconfig
 install fzf
+install gettext
 install git
 install grep
 install moreutils
@@ -184,6 +187,7 @@ install_for_macos() {
 	install gnu-sed
 	install 'homebrew-zathura/zathura/zathura'
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
+	install ninja
 	install node
 	install npm
 	install shfmt
@@ -206,6 +210,7 @@ install_for_fedora() {
 	sudo dnf install lua compat-lua compat-lua-devel
 	install fira-code-fonts
 	install golang
+	install ninja-build
 	install nodejs
 	install procps-ng
 	install shfmt
@@ -217,7 +222,8 @@ install_for_debianlike() {
 	install fonts-firacode
 	install gh
 	install golang-go
-	sudo apt-get install lua5.1
+	install lua5.1
+	install ninja-build
 	install nodejs
 	install npm
 	install procps
@@ -279,7 +285,6 @@ cargo install zoxide
 source "${HOME}/.bash_profile"
 
 install_neovim() {
-	sudo apt-get install -y ninja-build gettext cmake unzip curl build-essential git
 	git clone https://github.com/neovim/neovim.git
 	pushd neovim
 	git checkout stable
