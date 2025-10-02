@@ -128,26 +128,29 @@ install() {
 	esac
 }
 
-install cloc
-install cmake
-install curl
-install fish
-install fontconfig
-install fzf
-install gettext
-install git
-install grep
-install moreutils
-install ncdu
-install pandoc
-install parallel
-install ripgrep
-install shellcheck
-install stow
-install tmux
-install unzip
-install zip
-install zsh
+install_general() {
+	install cloc
+	install cmake
+	install curl
+	install fish
+	install fontconfig
+	install fzf
+	install gettext
+	install git
+	install grep
+	install moreutils
+	install ncdu
+	install pandoc
+	install parallel
+	install ripgrep
+	install shellcheck
+	install stow
+	install tmux
+	install unzip
+	install zip
+	install zsh
+}
+install_general
 
 rm -f "${HOME}/.bashrc"
 rm -f "${HOME}/.bash_profile"
