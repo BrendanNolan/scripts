@@ -161,8 +161,8 @@ rm -rf "${HOME}/dev/dotfiles"
 git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles"
 rm -rf "${HOME}/dev/scripts"
 git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
-"${HOME}/dev/scripts/reload_dotfiles"
 source "${HOME}/.bash_profile"
+reload_dotfiles
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
