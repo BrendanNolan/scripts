@@ -27,6 +27,11 @@ setup_ssh() {
 	cat "${HOME}/.ssh/id_ed25519.pub"
 	read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
 	echo
+	while ! ssh -o StrictHostKeyChecking=no -T git@github.com 2>/dev/null; do
+		echo "Waiting for SSH key to propagate..."
+		sleep 5
+	done
+	echo "SSH key is now working!"
 }
 setup_ssh
 
