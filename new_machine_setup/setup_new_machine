@@ -188,12 +188,12 @@ install_for_macos() {
 	install gh
 	install go
 	install gnu-sed
-	install luv
 	install 'homebrew-zathura/zathura/zathura'
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
 	install ninja
 	install node
 	install npm
+	install neovim
 	install shfmt
 	install watch
 	install --gui aerospace
@@ -215,8 +215,8 @@ install_for_fedora() {
 	install compat-lua
 	install compat-lua-devel
 	install fira-code-fonts
-	install luv-devel
 	install golang
+	install neovim
 	install ninja-build
 	install nodejs
 	install procps-ng
@@ -229,8 +229,8 @@ install_for_debianlike() {
 	install fonts-firacode
 	install gh
 	install golang-go
-	install libluv-dev
 	install lua5.1
+	sudo snap install nvim --classic
 	install ninja-build
 	install nodejs
 	install npm
@@ -291,21 +291,6 @@ cargo install zoxide
 
 # Set up env again, just in case this script was run via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
-
-install_neovim() {
-	git clone https://github.com/neovim/neovim.git
-	pushd neovim
-	git checkout stable
-	local install_prefix
-	install_prefix=${TOOLS_HOME%/bin}
-	install_prefix=${install_prefix%/bin/}
-	cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${install_prefix}"
-	cmake --build build
-	cmake --install build
-	popd
-	rm -rf neovim
-}
-install_neovim
 
 install_gitleaks() {
 	if ! which go; then
