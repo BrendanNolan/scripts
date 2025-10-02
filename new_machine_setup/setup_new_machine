@@ -283,8 +283,12 @@ install_neovim() {
 	git clone https://github.com/neovim/neovim.git
 	pushd neovim
 	git checkout stable
-	make CMAKE_BUILD_TYPE=Release
-	make CMAKE_INSTALL_PREFIX="${TOOLS_HOME}" install
+	local install_prefix
+	install_prefix=${TOOLS_HOME%/bin}
+	install_prefix=${install_prefix%/bin/}
+	cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${install_prefix}"
+	cmake --build build
+	cmake --install build
 	popd
 	rm -rf neovim
 }
