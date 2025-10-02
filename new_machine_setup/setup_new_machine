@@ -164,6 +164,13 @@ git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
 source "${HOME}/.bash_profile"
 reload_dotfiles
 
+initialise_dotfile_reload_hook() {
+	local hook_file
+	hook_file="${HOME}/dev/dotfiles/.git/post-commit"
+	echo -e '#!/usr/bin/env bash\n\nreload_dotfiles' >>"${hook_file}"
+}
+initialise_dotfile_reload_hook
+
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
 	brew tap 'felixkratz/formulae'
