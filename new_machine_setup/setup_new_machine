@@ -177,6 +177,8 @@ install_for_macos() {
 	install bash
 	install 'dlvhdr/formulae/diffnav'
 	install 'felixkratz/formulae/borders'
+	brew install lua@5.1
+	brew link lua@5.1
 	install gh
 	install go
 	install gnu-sed
@@ -201,6 +203,7 @@ install_for_fedora() {
 	sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
 	sudo dnf install -y gh --repo gh-cli
 
+	sudo dnf install lua compat-lua compat-lua-devel
 	install fira-code-fonts
 	install golang
 	install nodejs
@@ -214,6 +217,7 @@ install_for_debianlike() {
 	install fonts-firacode
 	install gh
 	install golang-go
+	sudo apt-get install lua5.1
 	install nodejs
 	install npm
 	install procps
