@@ -19,8 +19,13 @@ Linux)
 		read -r the_user </dev/tty
 	done
 	if ! id -u "${the_user}" >/dev/null 2>&1; then
-		sudo useradd -m -G wheel -s /bin/bash "${the_user}"
-		sudo passwd "${the_user}"
+		if [ -f /etc/debian_version ]; then
+			sudo adduser --gecos "" "${the_user}"
+			sudo usermod -aG sudo "${the_user}"
+		else
+			sudo useradd -m -G wheel -s /bin/bash "${the_user}"
+			sudo passwd "${the_user}"
+		fi
 	fi
 	echo
 	echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
