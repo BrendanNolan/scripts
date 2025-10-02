@@ -188,6 +188,7 @@ install_for_macos() {
 	install gh
 	install go
 	install gnu-sed
+	install luv
 	install 'homebrew-zathura/zathura/zathura'
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
 	install ninja
@@ -210,8 +211,11 @@ install_for_fedora() {
 	sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
 	sudo dnf install -y gh --repo gh-cli
 
-	sudo dnf install lua compat-lua compat-lua-devel
+	install lua
+	install compat-lua
+	install compat-lua-devel
 	install fira-code-fonts
+	install luv-devel
 	install golang
 	install ninja-build
 	install nodejs
@@ -225,6 +229,7 @@ install_for_debianlike() {
 	install fonts-firacode
 	install gh
 	install golang-go
+	install libluv-dev
 	install lua5.1
 	install ninja-build
 	install nodejs
