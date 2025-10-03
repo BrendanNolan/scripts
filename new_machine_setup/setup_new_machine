@@ -57,28 +57,13 @@ if [[ -z "${os+x}" ]]; then
 fi
 
 setup_homebrew() {
+	local brew_install_script
 	brew_install_script=$(mktemp)
 	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
 		bash "${brew_install_script}"
 	else
 		bail "Failed to install homebrew"
 	fi
-	unset brew_install_script
-	if [[ -f "/opt/homebrew/bin/brew" ]]; then
-		eval "$(/opt/homebrew/bin/brew shellenv)"
-		PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:${PATH}"
-	elif [[ -f "/usr/local/bin/brew" ]]; then
-		eval "$(/usr/local/bin/brew shellenv)"
-		PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
-	elif [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-		PATH="/home/linuxbrew/.linuxbrew/opt/gnu-sed/libexec/gnubin:${PATH}"
-	fi
-	if ! which brew; then
-		bail "Failed to install homebrew"
-	fi
-	PROTOC="$(brew --prefix)/opt/protobuf/bin/protoc"
-	export PROTOC
 }
 setup_homebrew
 
