@@ -55,7 +55,8 @@ esac
 if [[ -z "${os+x}" ]]; then
 	bail "Unrecognised OS"
 fi
-if [[ "${os}" == macos ]]; then
+
+setup_homebrew() {
 	brew_install_script=$(mktemp)
 	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
 		/bin/sh "${brew_install_script}"
@@ -63,7 +64,23 @@ if [[ "${os}" == macos ]]; then
 		bail "Failed to install homebrew"
 	fi
 	unset brew_install_script
-fi
+	if [[ -f "/opt/homebrew/bin/brew" ]]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+		PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:${PATH}"
+	elif [[ -f "/usr/local/bin/brew" ]]; then
+		eval "$(/usr/local/bin/brew shellenv)"
+		PATH="/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}"
+	elif [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+		PATH="/home/linuxbrew/.linuxbrew/opt/gnu-sed/libexec/gnubin:${PATH}"
+	fi
+	if ! which brew; then
+		bail "Failed to install homebrew"
+	fi
+	PROTOC="$(brew --prefix)/opt/protobuf/bin/protoc"
+	export PROTOC
+}
+setup_homebrew
 
 update_package_manager() {
 	case "${os}" in
@@ -77,8 +94,6 @@ update_package_manager() {
 		;;
 	debianlike)
 		sudo apt-get update
-		sudo apt-get install -y snapd
-		sudo systemctl enable --now snapd # Enable and start the snapd daemon
 		;;
 	esac
 }
@@ -112,17 +127,13 @@ install() {
 		fi
 		;;
 	fedora)
-		sudo dnf install -y "${package}"
+		if ! brew istall "${package}"; then
+			sudo dnf install -y "${package}"
+		fi
 		;;
 	debianlike)
-		if apt search "${package}" >/dev/null 2>&1; then
+		if ! brew istall "${package}"; then
 			sudo apt-get install -y "${package}"
-		else
-			if snap find "${package}" | grep -q "^${package} "; then
-				sudo snap install "${package}"
-			else
-				bail "Error: ${package} not available in apt or snap"
-			fi
 		fi
 		;;
 	esac
@@ -140,6 +151,7 @@ install_general() {
 	install grep
 	install moreutils
 	install ncdu
+	install neovim
 	install pandoc
 	install parallel
 	install ripgrep
@@ -193,7 +205,6 @@ install_for_macos() {
 	install ninja
 	install node
 	install npm
-	install neovim
 	install shfmt
 	install watch
 	install --gui aerospace
@@ -216,7 +227,6 @@ install_for_fedora() {
 	install compat-lua-devel
 	install fira-code-fonts
 	install golang
-	install neovim
 	install ninja-build
 	install nodejs
 	install procps-ng
@@ -230,7 +240,6 @@ install_for_debianlike() {
 	install gh
 	install golang-go
 	install lua5.1
-	sudo snap install nvim --classic
 	install ninja-build
 	install nodejs
 	install npm
