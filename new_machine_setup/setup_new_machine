@@ -148,6 +148,7 @@ install_general() {
 	install fzf
 	install gettext
 	install git
+	install gitleaks
 	install grep
 	install moreutils
 	install ncdu
@@ -300,18 +301,6 @@ cargo install zoxide
 
 # Set up env again, just in case this script was run via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
-
-install_gitleaks() {
-	if ! which go; then
-		bail "Cannot build gitleaks without go"
-	fi
-	git clone https://github.com/gitleaks/gitleaks.git
-	pushd gitleaks
-	make build
-	popd
-	rm -rf gitleaks
-}
-install_gitleaks
 
 case "${os}" in
 macos) ;;
