@@ -59,7 +59,7 @@ fi
 setup_homebrew() {
 	brew_install_script=$(mktemp)
 	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
-		/bin/sh "${brew_install_script}"
+		bash "${brew_install_script}"
 	else
 		bail "Failed to install homebrew"
 	fi
