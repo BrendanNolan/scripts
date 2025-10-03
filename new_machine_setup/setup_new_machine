@@ -304,3 +304,5 @@ debianlike)
 	echo "You may want to try to install wezterm manually now"
 	;;
 esac
+
+hash -r
