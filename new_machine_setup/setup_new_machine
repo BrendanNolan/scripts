@@ -166,7 +166,8 @@ while ! git clone git@github.com:BrendanNolan/dotfiles.git "${HOME}/dev/dotfiles
 done
 rm -rf "${HOME}/dev/scripts"
 git clone git@github.com:BrendanNolan/scripts.git "${HOME}/dev/scripts"
-"${HOME}/dev/scripts/reload_dotfiles"
+"${HOME}/dev/scripts/reload_dotfiles" # Uses stow, but stow is not yet on the path since the
+                                      # dotfiles have not yet been reloaded
 source "${HOME}/.bash_profile"
 
 initialise_dotfile_reload_hook() {
