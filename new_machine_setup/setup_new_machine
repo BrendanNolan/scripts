@@ -112,12 +112,12 @@ install() {
 		fi
 		;;
 	fedora)
-		if ! brew istall "${package}"; then
+		if ! brew install "${package}"; then
 			sudo dnf install -y "${package}"
 		fi
 		;;
 	debianlike)
-		if ! brew istall "${package}"; then
+		if ! brew install "${package}"; then
 			sudo apt-get install -y "${package}"
 		fi
 		;;
