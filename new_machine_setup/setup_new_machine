@@ -14,22 +14,6 @@ if [ "$(id -u)" -eq 0 ]; then
 	bail "Do not run this script as root"
 fi
 
-setup_ssh() {
-	if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
-		email_address=''
-		while [[ -z "${email_address}" ]]; do
-			echo "Please enter your email for your new ssh key:"
-			read -r email_address </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
-		done
-		ssh-keygen -t ed25519 -C "${email_address}"
-	fi
-	echo "Add this key to github now; press any key to continue when you are done"
-	cat "${HOME}/.ssh/id_ed25519.pub"
-	read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
-	echo
-}
-setup_ssh
-
 os=""
 case "$(uname -s)" in
 Darwin)
@@ -56,33 +40,21 @@ if [[ -z "${os+x}" ]]; then
 	bail "Unrecognised OS"
 fi
 
-setup_homebrew() {
-	local brew_install_script
-	brew_install_script=$(mktemp)
-	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
-		bash "${brew_install_script}"
-	else
-		bail "Failed to install homebrew"
+setup_ssh() {
+	if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
+		email_address=''
+		while [[ -z "${email_address}" ]]; do
+			echo "Please enter your email for your new ssh key:"
+			read -r email_address </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
+		done
+		ssh-keygen -t ed25519 -C "${email_address}"
 	fi
+	echo "Add this key to github now; press any key to continue when you are done"
+	cat "${HOME}/.ssh/id_ed25519.pub"
+	read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
+	echo
 }
-setup_homebrew
-
-update_package_manager() {
-	case "${os}" in
-	macos)
-		brew update
-		brew upgrade
-		brew clean
-		;;
-	fedora)
-		sudo dnf makecache -y
-		;;
-	debianlike)
-		sudo apt-get update
-		;;
-	esac
-}
-update_package_manager
+setup_ssh
 
 install() {
 	local is_gui=false
@@ -120,39 +92,22 @@ install() {
 		;;
 	debianlike)
 		if brew info "${package}" &>/dev/null; then
+			if [[ "${package}" == neovim ]]; then
+				echo "---neovim---brew---"
+			fi
 			brew install "${package}"
 		else
+			if [[ "${package}" == neovim ]]; then
+				echo "---neovim---apt---"
+			fi
 			sudo apt-get install -y "${package}"
 		fi
 		;;
 	esac
 }
-
-install_general() {
-	install cloc
-	install cmake
-	install curl
-	install fish
-	install fontconfig
-	install fzf
-	install gettext
-	install git
-	install gitleaks
-	install grep
-	install moreutils
-	install ncdu
-	install neovim
-	install pandoc
-	install parallel
-	install ripgrep
-	install shellcheck
-	install stow
-	install tmux
-	install unzip
-	install zip
-	install zsh
-}
-install_general
+# The below install calls will not use brew. Could be a problem here on macos
+install git
+install stow
 
 rm -f "${HOME}/.bashrc"
 rm -f "${HOME}/.bash_profile"
@@ -168,8 +123,10 @@ done
 scripts_dir="${HOME}/dev/scripts"
 git clone git@github.com:BrendanNolan/scripts.git "${scripts_dir}"
 source "${dotfile_dir}/.bash_profile"
+hash -r
 "${scripts_dir}/reload_dotfiles"
 source "${HOME}/.bash_profile"
+hash -r
 unset dotfile_dir
 unset scripts_dir
 
@@ -179,6 +136,59 @@ initialise_dotfile_reload_hook() {
 	echo -e '#!/usr/bin/env bash\n\nreload_dotfiles' >>"${hook_file}"
 }
 initialise_dotfile_reload_hook
+
+setup_homebrew() {
+	local brew_install_script
+	brew_install_script=$(mktemp)
+	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
+		bash "${brew_install_script}"
+	else
+		bail "Failed to install homebrew"
+	fi
+}
+setup_homebrew
+source "${HOME}/.bash_profile"
+hash -r
+
+update_package_manager() {
+	brew update
+	brew upgrade
+	brew clean
+	case "${os}" in
+	macos) ;;
+	fedora)
+		sudo dnf makecache -y
+		;;
+	debianlike)
+		sudo apt-get update
+		;;
+	esac
+}
+update_package_manager
+
+install_general() {
+	install cloc
+	install cmake
+	install curl
+	install fish
+	install fontconfig
+	install fzf
+	install gettext
+	install gitleaks
+	install grep
+	install moreutils
+	install ncdu
+	install neovim
+	install pandoc
+	install parallel
+	install ripgrep
+	install shellcheck
+	install tmux
+	install unzip
+	install zip
+	install zsh
+}
+install_general
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
