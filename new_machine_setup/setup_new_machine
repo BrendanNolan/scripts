@@ -117,10 +117,6 @@ if ! which git; then
 	install git
 fi
 
-rm -f "${HOME}/.bashrc"
-rm -f "${HOME}/.bash_profile"
-rm -f "${HOME}/.zshrc"
-rm -rf "${HOME}/.config"
 mkdir -p "${HOME}/dev" || exit 1
 dotfile_dir="${HOME}/dev/dotfiles"
 rm -rf "${dotfile_dir}"
@@ -154,7 +150,6 @@ setup_homebrew
 source "${dotfile_dir}/.bash_profile"
 hash -r
 unset dotfile_dir
-
 if ! which brew; then
 	bail "Cannot find homebrew in path"
 fi
@@ -175,6 +170,10 @@ update_package_manager() {
 }
 update_package_manager
 
+rm -f "${HOME}/.bashrc"
+rm -f "${HOME}/.bash_profile"
+rm -f "${HOME}/.zshrc"
+rm -rf "${HOME}/.config"
 install stow
 reload_dotfiles
 source "${HOME}/.bash_profile"
@@ -204,10 +203,6 @@ install_general() {
 	install zsh
 }
 install_general
-
-reload_dotfiles
-source "${HOME}/.bash_profile"
-hash -r
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
@@ -321,7 +316,8 @@ cargo install tree-sitter-cli
 cargo install --force yazi-build
 cargo install zoxide
 
-# Set up env again, just in case this script was run via source (though it shouldn't be)
+# Set up env again (to make sure that RUSTC_WRAPPER is set again), just in case this script was run
+# via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
 hash -r
 
