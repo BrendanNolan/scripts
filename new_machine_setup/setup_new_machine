@@ -229,6 +229,7 @@ install_for_macos() {
 	install ninja
 	install node
 	install npm
+	install pkgconf
 	install shfmt
 	install watch
 	install --gui aerospace
@@ -253,6 +254,7 @@ install_for_fedora() {
 	install golang
 	install ninja-build
 	install nodejs
+	install pkgconf
 	install procps-ng
 	install shfmt
 	install util-linux
@@ -267,6 +269,7 @@ install_for_debianlike() {
 	install ninja-build
 	install nodejs
 	install npm
+	install pkg-config
 	install procps
 	install shfmt
 	install util-linux
