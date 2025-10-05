@@ -189,7 +189,13 @@ install_general() {
 	install gettext
 	install gitleaks
 	install grep
-	install moreutils
+	# --- Handling the fact that moreutils has its own parllel command --- #
+	# We want to make sure that we find gnu parallel when we run `which parallel`
+	brew install moreutils
+	brew unlink moreutils
+	brew install parallel
+	brew link --overwrite moreutils
+	# -------------------------------------------------------------------- #
 	install ncdu
 	install neovim
 	install pandoc
