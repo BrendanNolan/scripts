@@ -105,14 +105,22 @@ install() {
 		;;
 	esac
 }
-# The below install calls will not use brew. Could be a problem here on macos
-install git
-install stow
+
+if ! which git; then
+	if [[ "${os}" == macos ]]; then
+		bail "Install git before proceeding"
+	fi
+	# On macos, the script will already have bailed if git is not installed. On linux, this install
+	# call will use the builtin package manger, since brew will not yet be in the path. The issue is
+	# that we need git to clone the dotfiles which will allow brew to be in the path at all, so even
+	# installing brew will not fix the issue.
+	install git
+fi
 
 rm -f "${HOME}/.bashrc"
 rm -f "${HOME}/.bash_profile"
 rm -f "${HOME}/.zshrc"
-rm -f "${HOME}/.config"
+rm -rf "${HOME}/.config"
 mkdir -p "${HOME}/dev" || exit 1
 dotfile_dir="${HOME}/dev/dotfiles"
 rm -rf "${dotfile_dir}"
@@ -121,13 +129,8 @@ while ! git clone git@github.com:BrendanNolan/dotfiles.git "${dotfile_dir}"; do
 	sleep 5
 done
 scripts_dir="${HOME}/dev/scripts"
+rm -rf "${scripts_dir}"
 git clone git@github.com:BrendanNolan/scripts.git "${scripts_dir}"
-source "${dotfile_dir}/.bash_profile"
-hash -r
-"${scripts_dir}/reload_dotfiles"
-source "${HOME}/.bash_profile"
-hash -r
-unset dotfile_dir
 unset scripts_dir
 
 initialise_dotfile_reload_hook() {
@@ -147,8 +150,14 @@ setup_homebrew() {
 	fi
 }
 setup_homebrew
-source "${HOME}/.bash_profile"
+
+source "${dotfile_dir}/.bash_profile"
 hash -r
+unset dotfile_dir
+
+if ! which brew; then
+	bail "Cannot find homebrew in path"
+fi
 
 update_package_manager() {
 	brew update
@@ -165,6 +174,11 @@ update_package_manager() {
 	esac
 }
 update_package_manager
+
+install stow
+reload_dotfiles
+source "${HOME}/.bash_profile"
+hash -r
 
 install_general() {
 	install cloc
@@ -183,12 +197,17 @@ install_general() {
 	install parallel
 	install ripgrep
 	install shellcheck
+	install stow
 	install tmux
 	install unzip
 	install zip
 	install zsh
 }
 install_general
+
+reload_dotfiles
+source "${HOME}/.bash_profile"
+hash -r
 
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
@@ -304,6 +323,7 @@ cargo install zoxide
 
 # Set up env again, just in case this script was run via source (though it shouldn't be)
 source "${HOME}/.bash_profile"
+hash -r
 
 case "${os}" in
 macos) ;;
@@ -314,5 +334,3 @@ debianlike)
 	echo "You may want to try to install wezterm manually now"
 	;;
 esac
-
-hash -r
