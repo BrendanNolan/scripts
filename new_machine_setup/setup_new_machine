@@ -333,9 +333,9 @@ hash -r
 case "${os}" in
 macos) ;;
 fedora)
-	echo "You may want to try to install wezterm manually now"
+	echo "You may want to try to install wezterm and cuda manually now"
 	;;
 debianlike)
-	echo "You may want to try to install wezterm manually now"
+	echo "You may want to try to install wezterm and cuda manually now"
 	;;
 esac
