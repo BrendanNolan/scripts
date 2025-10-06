@@ -157,7 +157,6 @@ fi
 update_package_manager() {
 	brew update
 	brew upgrade
-	brew clean
 	case "${os}" in
 	macos) ;;
 	fedora)
