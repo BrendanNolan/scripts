@@ -181,6 +181,7 @@ hash -r
 install_general() {
 	install cloc
 	install cmake
+	install conan
 	install curl
 	install fish
 	install fontconfig
