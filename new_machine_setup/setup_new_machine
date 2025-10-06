@@ -44,7 +44,7 @@ setup_ssh() {
 	if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
 		email_address=''
 		while [[ -z "${email_address}" ]]; do
-			echo "Please enter your email for your new ssh key:"
+			echo "Please enter the comment for your new ssh key (e.g. your email address):"
 			read -r email_address </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
 		done
 		ssh-keygen -t ed25519 -C "${email_address}"
