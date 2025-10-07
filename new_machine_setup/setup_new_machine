@@ -330,12 +330,5 @@ cargo install zoxide
 source "${HOME}/.bash_profile"
 hash -r
 
-case "${os}" in
-macos) ;;
-fedora)
-	echo "You may want to try to install wezterm and cuda manually now"
-	;;
-debianlike)
-	echo "You may want to try to install wezterm and cuda manually now"
-	;;
-esac
+echo "You may now wish to install cuda; you may even have a script for it among the following:"
+find "${SCRIPTS_HOME}" -iname cuda || true

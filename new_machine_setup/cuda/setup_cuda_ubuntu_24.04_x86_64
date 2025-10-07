@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+bail() {
+	echo "${1}"
+	exit 1
+}
+
+check_ubuntu_2404_x86_64() {
+	if [[ "$(uname -s)" != "Linux" ]]; then
+		return 1
+	fi
+	if [[ "$(uname -m)" != "x86_64" ]]; then
+		return 1
+	fi
+	if ! grep -q 'Ubuntu 24\.04' /etc/os-release 2>/dev/null; then
+		return 1
+	fi
+	return 0
+}
+
+check_ubuntu_2404_x86_64 || bail 'Not Ubuntu 24.04'
+lspci | grep -qi nvidia || bail 'Suitable Nvidia graphics card not found'
+gcc --version &>/dev/null || bail 'GCC not installed'
+
+# Found at https://developer.nvidia.com/cuda-downloads
+
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda-toolkit-13-0
+
+sudo apt-get install -y nvidia-open
