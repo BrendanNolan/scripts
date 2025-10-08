@@ -287,8 +287,8 @@ debianlike)
 	;;
 esac
 
-npm install jquery
-npm install tldr
+npm install -g jquery
+npm install -g tldr
 
 # Unsetting RUSTC_WRAPPER just while we do the initial cargo installs
 unset RUSTC_WRAPPER
