@@ -196,6 +196,7 @@ install_general() {
 	brew install parallel
 	brew link --overwrite moreutils
 	# -------------------------------------------------------------------- #
+	install jq
 	install ncdu
 	install neovim
 	install pandoc
@@ -228,7 +229,6 @@ install_for_macos() {
 	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
 	install ninja
 	install node
-	install npm
 	install pkgconf
 	install shfmt
 	install watch
@@ -268,7 +268,6 @@ install_for_debianlike() {
 	install lua5.1
 	install ninja-build
 	install nodejs
-	install npm
 	install pkg-config
 	install procps
 	install shfmt
@@ -286,9 +285,6 @@ debianlike)
 	install_for_debianlike
 	;;
 esac
-
-npm install -g jquery
-npm install -g tldr
 
 # Unsetting RUSTC_WRAPPER just while we do the initial cargo installs
 unset RUSTC_WRAPPER
