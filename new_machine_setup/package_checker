@@ -17,7 +17,7 @@ Linux)
 		if grep -iq '^ID=fedora$' "${os_release_file}"; then
 			dnf list available "${package}" >/dev/null 2>&1
 		elif grep -iEq '^ID=(ubuntu|debian)$' "${os_release_file}"; then
-		    apt search "${package}" >/dev/null 2>&1
+			apt search "${package}" >/dev/null 2>&1
 		else
 			bail "Unrecognised linux distro"
 		fi
