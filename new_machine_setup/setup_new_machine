@@ -328,4 +328,4 @@ source "${HOME}/.bash_profile"
 hash -r
 
 echo "You may now wish to install cuda; you may even have a script for it among the following:"
-find "${SCRIPTS_HOME}" -iname cuda || true
+find "${SCRIPTS_HOME}" -iname '*setup_cuda*' || true
