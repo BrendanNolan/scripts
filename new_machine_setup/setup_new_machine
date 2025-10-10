@@ -187,6 +187,7 @@ install_general() {
 	install fontconfig
 	install fzf
 	install gettext
+	install git-delta
 	install gitleaks
 	install grep
 	# --- Handling the fact that moreutils has its own parllel command --- #
