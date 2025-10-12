@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+tmux kill-server
+tmux_init "${HOME}/dev/fave-tmux/tmux.json"
