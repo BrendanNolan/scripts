@@ -22,7 +22,7 @@ report="cuda_gpu_sum"
 
 # Usage function
 usage() {
-    echo "Usage: $0 [-t trace] [-s sample] [-c ctxsw] [-o output] [-r report]"
+    echo "Usage: $0 [-t trace] [-s sample] [-c ctxsw] [-o output] [-r report] program"
     echo "  -t trace   : Set the trace option (default: --trace=cuda)"
     echo "  -s sample  : Set the sample option (default: --sample=none)"
     echo "  -c ctxsw   : Set the context switch option (default: --cpuctxsw=none)"
