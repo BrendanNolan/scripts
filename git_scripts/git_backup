@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+git branch -D bak 2>/dev/null
+git branch bak
+echo "Diff with bak:"
+git diff bak
