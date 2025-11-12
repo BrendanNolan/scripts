@@ -183,7 +183,6 @@ install_general() {
 	install cmake
 	install conan
 	install curl
-	install flamegraph
 	install fish
 	install fontconfig
 	install fzf
