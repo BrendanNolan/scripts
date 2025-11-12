@@ -213,6 +213,16 @@ install_general() {
 }
 install_general
 
+install_flamegraph() {
+	local flame_home
+	flame_home="${TOOLS_HOME}/Flamegraph"
+	git clone https://github.com/brendangregg/FlameGraph "${flame_home}"
+	cp "${flame_home}/flamegraph.pl" "${TOOLS_HOME}"
+	cp "${flame_home}/stackcollapse-perf.pl" "${TOOLS_HOME}"
+	rm -rf "${flame_home}"
+}
+install_flamegraph
+
 install_for_macos() {
 	brew tap 'dlvhdr/formulae'
 	brew tap 'felixkratz/formulae'
