@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dir='.'
-if [[ $# -ge 1 ]]; then
+if [[ $# -gt 1 ]]; then
 	echo "Usage format_cpp [dir]" >&2
 	exit 1
 fi
