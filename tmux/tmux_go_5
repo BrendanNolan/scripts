@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-index=5
-session_name=$(tmux list-sessions -F "#{session_index}:#{session_name}" | awk -F: -v idx="$index" '$1==idx {print $2}')
-[ -n "$session_name" ] && tmux switch-client -t "$session_name" \; select-window -t 1
