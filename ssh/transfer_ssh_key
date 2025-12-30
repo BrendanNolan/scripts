@@ -37,6 +37,18 @@ fi
 
 pub_key_file="$(find "${HOME}/.ssh/" -name "*.pub" | fzf)"
 
-ssh "${user}@${host}" \
-	'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh/authorized_keys' \
-	<"${pub_key_file}"
+# Since mkdir does not consume stdin, it will be intact to be comsumed by cat
+ssh "${user}@${host}" '
+    mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh/authorized_keys
+	' <"${pub_key_file}"
+
+# The single-quoted string (spaces, newlines and all) will be seen exactly as-is by the remote shell
+ssh "${user}@${host}" '
+    set -e
+    authorised_keys_file="~/.ssh/authorized_keys"
+    [ -f "${authorised_keys_file}" ] || exit 0
+    tmp="$(mktemp)"
+    sort -u "${authorised_keys_file}" > "${tmp}"
+    chmod 600 "${tmp}"
+    mv "${tmp}" "${authorised_keys_file}"
+'
