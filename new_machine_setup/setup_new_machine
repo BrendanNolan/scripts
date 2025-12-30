@@ -262,6 +262,7 @@ install_for_fedora() {
 	install compat-lua
 	install compat-lua-devel
 	install fira-code-fonts
+	install gdb
 	install golang
 	install ninja-build
 	install nodejs
@@ -275,6 +276,7 @@ install_for_fedora() {
 install_for_debianlike() {
 	install build-essential
 	install fontforge
+	install gdb
 	install gh
 	install go
 	install lua5.1
