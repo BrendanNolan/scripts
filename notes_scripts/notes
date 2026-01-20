@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 
-tmux new-window -n notes
-pushd "${HOME}/dev/obsidian" || exit 1
-nvim "$(fd -t f . .)"
-popd || exit
-tmux kill-window
+tmux new-window -n notes -c "${HOME}/dev/obsidian" 'nvim "$(fd -t f . . | fzf)"'
+
