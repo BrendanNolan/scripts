@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [[ -z "${1}" ]]; then
+	echo "Usage: $0 <input-file>"
+	exit 1
+fi
+
+if [[ ! -f "${1}" ]]; then
+	echo "Error: File '${1}' not found"
+	exit 1
+fi
+
+output="/tmp/redtext_output.html"
+
+echo "<html><body><pre>$(sed 's/<<\([^>]*\)>>/<span style="color:red">\1<\/span>/g' "${1}")</pre></body></html>" >"$output"
+
+open "$output"
