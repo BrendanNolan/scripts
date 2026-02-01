@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# Designed to be a single program that can be used by the EDITOR and VISUAL env vars. If, for
+# example, you set EDITOR to "nvim --clean", it will work for some programs and not for others.
+
+exec nvim --clean "$@"
