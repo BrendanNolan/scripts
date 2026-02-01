@@ -202,7 +202,6 @@ install_general() {
 	install neovim
 	install pandoc
 	install parallel
-	install prettier
 	install ripgrep
 	install rsync
 	install shellcheck
