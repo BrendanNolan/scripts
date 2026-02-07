@@ -7,4 +7,6 @@ if [[ $# -ne 1 ]]; then
 	exit 1
 fi
 
-jq . "$1" | sponge "$1"
+formatted_file=$(mktemp)
+jq . "${1}" > "${formatted_file}"
+mv "${formatted_file}" "${1}"
