@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+	echo "Usage: rebase_repos REPO_PATH..."
+	echo "Rebase each repo on the remote"
+}
+
+while [[ $# -gt 0 ]]; do
+	if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
+		usage
+		exit 0
+	fi
+	echo "Attempting to update ${1}"
+	pushd "${1}" &>/dev/null
+	git rebase origin/"$(git branch --show-current)" &>/dev/null
+	popd &>/dev/null
+	echo "Successfully updated ${1}"
+	shift
+done
