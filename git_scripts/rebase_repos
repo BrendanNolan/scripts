@@ -12,10 +12,10 @@ while [[ $# -gt 0 ]]; do
 		usage
 		exit 0
 	fi
-	echo "Attempting to update ${1}"
+	printf 'Attempting to update %s ... ' "${1}"
 	pushd "${1}" &>/dev/null
 	git rebase origin/"$(git branch --show-current)" &>/dev/null
 	popd &>/dev/null
-	echo "Successfully updated ${1}"
+	echo "Done"
 	shift
 done
