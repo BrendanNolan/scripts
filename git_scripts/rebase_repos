@@ -3,20 +3,20 @@
 set -euo pipefail
 
 usage() {
-	echo "Usage: rebase_repos REPO_PATH..."
-	echo "Rebase each repo on the remote"
+    echo "Usage: rebase_repos REPO_PATH..."
+    echo "Rebase each repo on the remote"
 }
 
 while [[ $# -gt 0 ]]; do
-	if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
-		usage
-		exit 0
-	fi
-	printf 'Updating %s ... ' "${1}"
-	pushd "${1}" &>/dev/null
-	git fetch &>/dev/null
-	git rebase origin/"$(git branch --show-current)" &>/dev/null
-	popd &>/dev/null
-	echo "Done"
-	shift
+    if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
+        usage
+        exit 0
+    fi
+    printf 'Updating %s ... ' "${1}"
+    pushd "${1}" &>/dev/null
+    git fetch &>/dev/null
+    git rebase origin/"$(git branch --show-current)" &>/dev/null
+    popd &>/dev/null
+    echo "Done"
+    shift
 done

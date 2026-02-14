@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ $# -ne 3 ]]; then
-	echo "Usage: change_starship_colours FIELD NEW_VALUE STARSHIP_CONF_FILE" >&2
-	exit 1
+    echo "Usage: change_starship_colours FIELD NEW_VALUE STARSHIP_CONF_FILE" >&2
+    exit 1
 fi
 
 field=$1
@@ -10,8 +10,8 @@ new_value=$2
 conf_file=$3
 
 if grep "${new_value}" "${conf_file}"; then
-	echo "New value ${new_value} already appears in ${conf_file}; not safe to use" >&2
-	exit 1
+    echo "New value ${new_value} already appears in ${conf_file}; not safe to use" >&2
+    exit 1
 fi
 
 old_value=$(grep -m1 "${field}" "${conf_file}" | awk '{print $NF}')

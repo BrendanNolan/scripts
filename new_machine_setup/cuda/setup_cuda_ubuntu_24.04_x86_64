@@ -3,21 +3,21 @@
 set -euo pipefail
 
 bail() {
-	echo "${1}"
-	exit 1
+    echo "${1}"
+    exit 1
 }
 
 check_ubuntu_2404_x86_64() {
-	if [[ "$(uname -s)" != "Linux" ]]; then
-		return 1
-	fi
-	if [[ "$(uname -m)" != "x86_64" ]]; then
-		return 1
-	fi
-	if ! grep -q 'Ubuntu 24\.04' /etc/os-release 2>/dev/null; then
-		return 1
-	fi
-	return 0
+    if [[ "$(uname -s)" != "Linux" ]]; then
+        return 1
+    fi
+    if [[ "$(uname -m)" != "x86_64" ]]; then
+        return 1
+    fi
+    if ! grep -q 'Ubuntu 24\.04' /etc/os-release 2>/dev/null; then
+        return 1
+    fi
+    return 0
 }
 
 check_ubuntu_2404_x86_64 || bail 'Not Ubuntu 24.04'

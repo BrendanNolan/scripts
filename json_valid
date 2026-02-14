@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if jq empty "$1"; then
-	echo "Valid"
+    echo "Valid"
 else
-	echo "Not valid"
+    echo "Not valid"
 fi

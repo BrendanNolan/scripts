@@ -6,123 +6,123 @@
 set -euo pipefail
 
 bail() {
-	echo "${1}"
-	exit 1
+    echo "${1}"
+    exit 1
 }
 
 if [ "$(id -u)" -eq 0 ]; then
-	bail "Do not run this script as root"
+    bail "Do not run this script as root"
 fi
 
 os=""
 case "$(uname -s)" in
 Darwin)
-	os=macos
-	;;
+    os=macos
+    ;;
 Linux)
-	if [[ -f /etc/os-release ]]; then
-		os_release_file="/etc/os-release"
-		if grep -iq '^ID=fedora$' "${os_release_file}"; then
-			os=fedora
-		elif grep -iEq '^ID=(ubuntu|debian)$' "${os_release_file}"; then
-			os=debianlike
-		fi
-	else
-		bail "Unrecognised Linux distro"
-	fi
-	;;
+    if [[ -f /etc/os-release ]]; then
+        os_release_file="/etc/os-release"
+        if grep -iq '^ID=fedora$' "${os_release_file}"; then
+            os=fedora
+        elif grep -iEq '^ID=(ubuntu|debian)$' "${os_release_file}"; then
+            os=debianlike
+        fi
+    else
+        bail "Unrecognised Linux distro"
+    fi
+    ;;
 *)
-	bail "Unrecognised OS"
-	;;
+    bail "Unrecognised OS"
+    ;;
 esac
 
 if [[ -z "${os+x}" ]]; then
-	bail "Unrecognised OS"
+    bail "Unrecognised OS"
 fi
 
 setup_ssh() {
-	if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
-		public_key_comment=''
-		while [[ -z "${public_key_comment}" ]]; do
-			echo "Please enter the comment for your new public ssh key (e.g. your email address):"
-			read -r public_key_comment </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
-		done
-		ssh-keygen -t ed25519 -C "${public_key_comment}"
-	fi
-	echo "Add this key to github now; press any key to continue when you are done"
-	cat "${HOME}/.ssh/id_ed25519.pub"
-	read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
-	echo
+    if [[ ! -e "${HOME}/.ssh/id_ed25519.pub" ]]; then
+        public_key_comment=''
+        while [[ -z "${public_key_comment}" ]]; do
+            echo "Please enter the comment for your new public ssh key (e.g. your email address):"
+            read -r public_key_comment </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
+        done
+        ssh-keygen -t ed25519 -C "${public_key_comment}"
+    fi
+    echo "Add this key to github now; press any key to continue when you are done"
+    cat "${HOME}/.ssh/id_ed25519.pub"
+    read -n 1 -s -r </dev/tty # /dev/tty prevents confusion of stdin when the script is curled into bash
+    echo
 }
 setup_ssh
 
 install() {
-	local is_gui=false
-	while [[ $# -gt 0 ]]; do
-		case "$1" in
-		--gui)
-			is_gui=true
-			shift
-			;;
-		--) # end of options
-			shift
-			break # break out of while loop
-			;;
-		*)     # anything else, stop processing
-			break # break out of while loop
-			;;
-		esac
-	done
-	[[ $# == 1 ]] || bail "Usage: install [--gui] package_name"
-	local package="${1}"
-	case "${os}" in
-	macos)
-		if [[ "${is_gui}" == true ]]; then
-			brew install --cask "${package}"
-		else
-			brew install "${package}"
-		fi
-		;;
-	fedora)
-		if brew info "${package}" &>/dev/null; then
-			brew install "${package}"
-		else
-			sudo dnf install -y "${package}"
-		fi
-		;;
-	debianlike)
-		if brew info "${package}" &>/dev/null; then
-			if [[ "${package}" == neovim ]]; then
-				echo "---neovim---brew---"
-			fi
-			brew install "${package}"
-		else
-			if [[ "${package}" == neovim ]]; then
-				echo "---neovim---apt---"
-			fi
-			sudo apt-get install -y "${package}"
-		fi
-		;;
-	esac
+    local is_gui=false
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        --gui)
+            is_gui=true
+            shift
+            ;;
+        --) # end of options
+            shift
+            break # break out of while loop
+            ;;
+        *)        # anything else, stop processing
+            break # break out of while loop
+            ;;
+        esac
+    done
+    [[ $# == 1 ]] || bail "Usage: install [--gui] package_name"
+    local package="${1}"
+    case "${os}" in
+    macos)
+        if [[ "${is_gui}" == true ]]; then
+            brew install --cask "${package}"
+        else
+            brew install "${package}"
+        fi
+        ;;
+    fedora)
+        if brew info "${package}" &>/dev/null; then
+            brew install "${package}"
+        else
+            sudo dnf install -y "${package}"
+        fi
+        ;;
+    debianlike)
+        if brew info "${package}" &>/dev/null; then
+            if [[ "${package}" == neovim ]]; then
+                echo "---neovim---brew---"
+            fi
+            brew install "${package}"
+        else
+            if [[ "${package}" == neovim ]]; then
+                echo "---neovim---apt---"
+            fi
+            sudo apt-get install -y "${package}"
+        fi
+        ;;
+    esac
 }
 
 if ! which git; then
-	if [[ "${os}" == macos ]]; then
-		bail "Install git before proceeding"
-	fi
-	# On macos, the script will already have bailed if git is not installed. On linux, this install
-	# call will use the builtin package manger, since brew will not yet be in the path. The issue is
-	# that we need git to clone the dotfiles which will allow brew to be in the path at all, so even
-	# installing brew will not fix the issue.
-	install git
+    if [[ "${os}" == macos ]]; then
+        bail "Install git before proceeding"
+    fi
+    # On macos, the script will already have bailed if git is not installed. On linux, this install
+    # call will use the builtin package manger, since brew will not yet be in the path. The issue is
+    # that we need git to clone the dotfiles which will allow brew to be in the path at all, so even
+    # installing brew will not fix the issue.
+    install git
 fi
 
 mkdir -p "${HOME}/dev" || exit 1
 dotfile_dir="${HOME}/dev/dotfiles"
 rm -rf "${dotfile_dir}"
 while ! git clone git@github.com:BrendanNolan/dotfiles.git "${dotfile_dir}"; do
-	echo "Could not clone from github, hopefully because github is processing the new ssh keys"
-	sleep 5
+    echo "Could not clone from github, hopefully because github is processing the new ssh keys"
+    sleep 5
 done
 scripts_dir="${HOME}/dev/scripts"
 rm -rf "${scripts_dir}"
@@ -130,20 +130,20 @@ git clone git@github.com:BrendanNolan/scripts.git "${scripts_dir}"
 unset scripts_dir
 
 initialise_dotfile_reload_hook() {
-	local hook_file
-	hook_file="${HOME}/dev/dotfiles/.git/post-commit"
-	echo -e '#!/usr/bin/env bash\n\nreload_dotfiles' >>"${hook_file}"
+    local hook_file
+    hook_file="${HOME}/dev/dotfiles/.git/post-commit"
+    echo -e '#!/usr/bin/env bash\n\nreload_dotfiles' >>"${hook_file}"
 }
 initialise_dotfile_reload_hook
 
 setup_homebrew() {
-	local brew_install_script
-	brew_install_script=$(mktemp)
-	if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
-		bash "${brew_install_script}"
-	else
-		bail "Failed to install homebrew"
-	fi
+    local brew_install_script
+    brew_install_script=$(mktemp)
+    if curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >"${brew_install_script}"; then
+        bash "${brew_install_script}"
+    else
+        bail "Failed to install homebrew"
+    fi
 }
 setup_homebrew
 
@@ -151,21 +151,21 @@ source "${dotfile_dir}/.bash_profile"
 hash -r
 unset dotfile_dir
 if ! which brew; then
-	bail "Cannot find homebrew in path"
+    bail "Cannot find homebrew in path"
 fi
 
 update_package_manager() {
-	brew update
-	brew upgrade
-	case "${os}" in
-	macos) ;;
-	fedora)
-		sudo dnf makecache -y
-		;;
-	debianlike)
-		sudo apt-get update
-		;;
-	esac
+    brew update
+    brew upgrade
+    case "${os}" in
+    macos) ;;
+    fedora)
+        sudo dnf makecache -y
+        ;;
+    debianlike)
+        sudo apt-get update
+        ;;
+    esac
 }
 update_package_manager
 
@@ -179,150 +179,150 @@ source "${HOME}/.bash_profile"
 hash -r
 
 install_general() {
-	install cloc
-	install cmake
-	install conan
-	install curl
-	install fish
-	install fontconfig
-	install fzf
-	install gettext
-	install git-delta
-	install gitleaks
-	install grep
-	# --- Handling the fact that moreutils has its own parllel command --- #
-	# We want to make sure that we find gnu parallel when we run `which parallel`
-	brew install moreutils
-	brew unlink moreutils
-	brew install parallel
-	brew link --overwrite moreutils
-	# -------------------------------------------------------------------- #
-	install jq
-	install ncdu
-	install neovim
-	install pandoc
-	install parallel
-	install ripgrep
-	install rsync
-	install shellcheck
-	install stow
-	install tmux
-	install unzip
-	install zip
-	install zsh
+    install cloc
+    install cmake
+    install conan
+    install curl
+    install fish
+    install fontconfig
+    install fzf
+    install gettext
+    install git-delta
+    install gitleaks
+    install grep
+    # --- Handling the fact that moreutils has its own parllel command --- #
+    # We want to make sure that we find gnu parallel when we run `which parallel`
+    brew install moreutils
+    brew unlink moreutils
+    brew install parallel
+    brew link --overwrite moreutils
+    # -------------------------------------------------------------------- #
+    install jq
+    install ncdu
+    install neovim
+    install pandoc
+    install parallel
+    install ripgrep
+    install rsync
+    install shellcheck
+    install stow
+    install tmux
+    install unzip
+    install zip
+    install zsh
 }
 install_general
 
 install_flamegraph() {
-	local flame_home
-	flame_home="${TOOLS_HOME}/Flamegraph"
-	git clone https://github.com/brendangregg/FlameGraph "${flame_home}"
-	cp "${flame_home}/flamegraph.pl" "${TOOLS_HOME}"
-	cp "${flame_home}/stackcollapse-perf.pl" "${TOOLS_HOME}"
-	rm -rf "${flame_home}"
+    local flame_home
+    flame_home="${TOOLS_HOME}/Flamegraph"
+    git clone https://github.com/brendangregg/FlameGraph "${flame_home}"
+    cp "${flame_home}/flamegraph.pl" "${TOOLS_HOME}"
+    cp "${flame_home}/stackcollapse-perf.pl" "${TOOLS_HOME}"
+    rm -rf "${flame_home}"
 }
 install_flamegraph
 
 install_for_macos() {
-	brew tap 'dlvhdr/formulae'
-	brew tap 'felixkratz/formulae'
-	brew tap 'homebrew-zathura/zathura'
-	brew tap 'homebrew/cask-fonts'
-	brew tap 'nikitabobko/tap'
-	install bash
-	install 'dlvhdr/formulae/diffnav'
-	install 'felixkratz/formulae/borders'
-	brew install lua@5.1
-	brew link lua@5.1
-	install gh
-	install go
-	install gnu-sed
-	install 'homebrew-zathura/zathura/zathura'
-	install 'homebrew-zathura/zathura/zathura-pdf-poppler'
-	install ninja
-	install node
-	install pkgconf
-	install shfmt
-	install watch
-	install --gui aerospace
-	install --gui font-fira-code
-	install --gui mactex
-	install --gui wezterm
+    brew tap 'dlvhdr/formulae'
+    brew tap 'felixkratz/formulae'
+    brew tap 'homebrew-zathura/zathura'
+    brew tap 'homebrew/cask-fonts'
+    brew tap 'nikitabobko/tap'
+    install bash
+    install 'dlvhdr/formulae/diffnav'
+    install 'felixkratz/formulae/borders'
+    brew install lua@5.1
+    brew link lua@5.1
+    install gh
+    install go
+    install gnu-sed
+    install 'homebrew-zathura/zathura/zathura'
+    install 'homebrew-zathura/zathura/zathura-pdf-poppler'
+    install ninja
+    install node
+    install pkgconf
+    install shfmt
+    install watch
+    install --gui aerospace
+    install --gui font-fira-code
+    install --gui mactex
+    install --gui wezterm
 }
 
 install_for_fedora() {
-	install '@c-development'
-	install '@development-tools'
-	# github cli
-	sudo dnf install -y dnf5-plugins
-	sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
-	sudo dnf install -y gh --repo gh-cli
-	# ----------
-	install lua
-	install compat-lua
-	install compat-lua-devel
-	install fira-code-fonts
-	install gdb
-	install golang
-	install ninja-build
-	install nodejs
-	install pkgconf
-	install procps-ng
-	install shfmt
-	install util-linux
-	sudo dnf install -y perf
+    install '@c-development'
+    install '@development-tools'
+    # github cli
+    sudo dnf install -y dnf5-plugins
+    sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+    sudo dnf install -y gh --repo gh-cli
+    # ----------
+    install lua
+    install compat-lua
+    install compat-lua-devel
+    install fira-code-fonts
+    install gdb
+    install golang
+    install ninja-build
+    install nodejs
+    install pkgconf
+    install procps-ng
+    install shfmt
+    install util-linux
+    sudo dnf install -y perf
 }
 
 install_for_debianlike() {
-	install build-essential
-	install fontforge
-	install gdb
-	install gh
-	install go
-	install lua5.1
-	install ninja-build
-	install nodejs
-	install pkg-config
-	install procps
-	install shfmt
-	install util-linux
-	sudo apt-get install -y linux-tools-common        # for the `perf` tool
-	sudo apt-get install -y linux-tools-generic       # for the `perf` tool
-	sudo apt-get install -y "linux-tools-$(uname -r)" # for the `perf` tool
+    install build-essential
+    install fontforge
+    install gdb
+    install gh
+    install go
+    install lua5.1
+    install ninja-build
+    install nodejs
+    install pkg-config
+    install procps
+    install shfmt
+    install util-linux
+    sudo apt-get install -y linux-tools-common        # for the `perf` tool
+    sudo apt-get install -y linux-tools-generic       # for the `perf` tool
+    sudo apt-get install -y "linux-tools-$(uname -r)" # for the `perf` tool
 }
 
 case "${os}" in
 macos)
-	install_for_macos
-	;;
+    install_for_macos
+    ;;
 fedora)
-	install_for_fedora
-	;;
+    install_for_fedora
+    ;;
 debianlike)
-	install_for_debianlike
-	;;
+    install_for_debianlike
+    ;;
 esac
 
 # Unsetting RUSTC_WRAPPER just while we do the initial cargo installs
 unset RUSTC_WRAPPER
 install_rust_toolchain_and_sccache_and_cargo_binstall() {
-	local rustup_install_script
-	rustup_install_script=$(mktemp)
-	if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
-		sh "${rustup_install_script}" -y || bail "Failed to install rustup"
-	else
-		bail "Failed to install rustup"
-	fi
-	rustup component add rust-analyzer --toolchain stable
-	# Installing sccache here because cargo-binstall needs it
-	cargo install sccache
-	local cargo_binstall_install_script
-	cargo_binstall_install_script=$(mktemp)
-	if curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh >"${cargo_binstall_install_script}"; then
-		bash "${cargo_binstall_install_script}" || bail "Failed to install cargo-binstall"
-	else
-		bail "Failed to install cargo-binstall"
-	fi
+    local rustup_install_script
+    rustup_install_script=$(mktemp)
+    if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >"${rustup_install_script}"; then
+        sh "${rustup_install_script}" -y || bail "Failed to install rustup"
+    else
+        bail "Failed to install rustup"
+    fi
+    rustup component add rust-analyzer --toolchain stable
+    # Installing sccache here because cargo-binstall needs it
+    cargo install sccache
+    local cargo_binstall_install_script
+    cargo_binstall_install_script=$(mktemp)
+    if curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh >"${cargo_binstall_install_script}"; then
+        bash "${cargo_binstall_install_script}" || bail "Failed to install cargo-binstall"
+    else
+        bail "Failed to install cargo-binstall"
+    fi
 }
 install_rust_toolchain_and_sccache_and_cargo_binstall
 cargo install bat

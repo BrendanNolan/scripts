@@ -12,4 +12,3 @@ session="${1}"
 if tmux has-session -t "${session}" &>/dev/null; then
     tmux select-window -t "${session}":1 &>/dev/null && tmux switch-client -t "${session}" &>/dev/null
 fi
-

@@ -2,14 +2,14 @@
 
 dir='.'
 if [[ $# -gt 1 ]]; then
-	echo "Usage format_cpp [dir]" >&2
-	exit 1
+    echo "Usage format_cpp [dir]" >&2
+    exit 1
 fi
 if [[ $# -eq 1 ]]; then
-	dir="${1}"
+    dir="${1}"
 fi
 
 find "${dir}" \
-	-type d \( -name build -o -name .git -o -name .venv \) -prune -false -o \
-	-type f \( -iname "*.hpp" -o -iname "*.cpp" -o -iname "*.cuh" -o -iname "*.cu" -o -iname "*.h" -o -iname "*.cc" \) \
-	-print0 | xargs -0 -P0 -I{} clang-format -i {}
+    -type d \( -name build -o -name .git -o -name .venv \) -prune -false -o \
+    -type f \( -iname "*.hpp" -o -iname "*.cpp" -o -iname "*.cuh" -o -iname "*.cu" -o -iname "*.h" -o -iname "*.cc" \) \
+    -print0 | xargs -0 -P0 -I{} clang-format -i {}

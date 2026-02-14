@@ -34,17 +34,17 @@ usage() {
 # Parse command line options
 while getopts "t:s:c:o:r:" opt; do
     case $opt in
-        t) trace="--trace=$OPTARG" ;;
-        s) sample="--sample=$OPTARG" ;;
-        c) ctxsw="--cpuctxsw=$OPTARG" ;;
-        o) output="$OPTARG" ;;
-        r) report="$OPTARG" ;;
-        \?) usage ;;
+    t) trace="--trace=$OPTARG" ;;
+    s) sample="--sample=$OPTARG" ;;
+    c) ctxsw="--cpuctxsw=$OPTARG" ;;
+    o) output="$OPTARG" ;;
+    r) report="$OPTARG" ;;
+    \?) usage ;;
     esac
 done
 
 # Shift the processed options away
-shift $((OPTIND -1))
+shift $((OPTIND - 1))
 
 # Run the nsys profile command
 nsys profile $trace $sample $ctxsw --force-overwrite=true -o $output "$@"

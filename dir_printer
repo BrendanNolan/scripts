@@ -5,5 +5,5 @@ set -euo pipefail
 readarray -d '' dirs < <(find . -maxdepth 1 -type d -not -path '\./\.*' -not -path '\.' -print0)
 
 for dir in "${dirs[@]}"; do
-	echo "<${dir}>"
+    echo "<${dir}>"
 done

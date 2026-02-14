@@ -3,10 +3,10 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-	echo "Usage: format_json <json_file>" >&2
-	exit 1
+    echo "Usage: format_json <json_file>" >&2
+    exit 1
 fi
 
 formatted_file=$(mktemp)
-jq . "${1}" > "${formatted_file}"
+jq . "${1}" >"${formatted_file}"
 mv "${formatted_file}" "${1}"

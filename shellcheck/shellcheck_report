@@ -7,5 +7,5 @@ success=$?
 report_name=$(basename "$1")
 report_file="${report_name}.shellcheck"
 if [[ "${success}" -ne 0 ]]; then
-	echo "${report}" >"${report_file}"
+    echo "${report}" >"${report_file}"
 fi

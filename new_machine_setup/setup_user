@@ -6,31 +6,31 @@
 set -euo pipefail
 
 bail() {
-	echo "${1}"
-	exit 1
+    echo "${1}"
+    exit 1
 }
 
 case "$(uname -s)" in
 Darwin) ;;
 Linux)
-	the_user=''
-	while [[ -z "$the_user" ]]; do
-		echo "Please enter the name of the user you wish to set up"
-		read -r the_user </dev/tty
-	done
-	if ! id -u "${the_user}" >/dev/null 2>&1; then
-		if [ -f /etc/debian_version ]; then
-			sudo adduser --gecos "" "${the_user}"
-			sudo usermod -aG sudo "${the_user}"
-		else
-			sudo useradd -m -G wheel -s /bin/bash "${the_user}"
-			sudo passwd "${the_user}"
-		fi
-	fi
-	echo
-	echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
-	;;
+    the_user=''
+    while [[ -z "$the_user" ]]; do
+        echo "Please enter the name of the user you wish to set up"
+        read -r the_user </dev/tty
+    done
+    if ! id -u "${the_user}" >/dev/null 2>&1; then
+        if [ -f /etc/debian_version ]; then
+            sudo adduser --gecos "" "${the_user}"
+            sudo usermod -aG sudo "${the_user}"
+        else
+            sudo useradd -m -G wheel -s /bin/bash "${the_user}"
+            sudo passwd "${the_user}"
+        fi
+    fi
+    echo
+    echo "Now please login as ${the_user} with the command \"su - ${the_user}\""
+    ;;
 *)
-	bail "Unrecognised OS"
-	;;
+    bail "Unrecognised OS"
+    ;;
 esac
