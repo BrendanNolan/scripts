@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git push --force origin "$(git branch --show-current)"

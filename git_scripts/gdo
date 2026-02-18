@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git diff "origin/$(git branch --show-current)"
