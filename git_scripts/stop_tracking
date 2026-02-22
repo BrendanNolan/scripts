@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: stop_tracking file..."
+}
+
+while [[ $# -gt 0 ]]; do
+    if [[ "${1}" == "-h" || "${1}" == "--help" ]]; then
+        usage
+        exit 0
+    fi
+    git rm --cached "${1}"
+    if [[ -f '.gitignore' ]]; then
+        echo "${1}" >>'.gitignore'
+    fi
+    shift
+done
