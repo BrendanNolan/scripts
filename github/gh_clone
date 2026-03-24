@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 usage() {
-    echo "Usage gh_clone --owner <owner> --repos <repo_name_regex>"
-    echo "Names will be matched case insensitively"
+    echo "Usage gh_clone -o|--owner <owner> -r|--repos <repo_name_regex>"
+    echo "Names will be matched case sensitively"
 }
 
 owner=""
@@ -10,11 +10,11 @@ repo_regex=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-    --owner)
+    -o | --owner)
         owner="${2}"
         shift 2
         ;;
-    --repos)
+    -r | --repos)
         repo_regex="${2}"
         shift 2
         ;;
@@ -29,6 +29,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+if [[ -z "${owner}" || -z "${repo_regex}" ]]; then
+    usage >&2
+    exit 1
+fi
+
 readarray -t repos < <(gh repo list "${owner}" --limit 1000 | awk '{print $1}')
 
 for repo in "${repos[@]}"; do
@@ -37,13 +42,13 @@ for repo in "${repos[@]}"; do
         continue
     fi
     if [[ -d "${repo_name}" ]]; then
-        echo "Directory ${repo_name} already exists"
+        echo "Directory ${repo_name} already exists" >&2
         continue
     fi
-    echo "Cloning repo ${repo} ..."
+    echo "Cloning repo ${repo} ..." >&2
     gh repo clone "${repo}"
-    echo "Finished cloning repo ${repo}"
+    echo "Finished cloning repo ${repo}" >&2
     for _ in {0..3}; do
-        echo
+        echo >&2
     done
 done
