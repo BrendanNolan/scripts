@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+usage() {
+    echo "Usage gh_clone --owner <owner> --repos <repo_name_regex>"
+    echo "Names will be matched case insensitively"
+}
+
+owner=""
+repo_regex=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+    --owner)
+        owner="${2}"
+        shift 2
+        ;;
+    --repos)
+        repo_regex="${2}"
+        shift 2
+        ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage >&2
+        exit 1
+        ;;
+    esac
+done
+
+readarray -t repos < <(gh repo list "${owner}" --limit 1000 | awk '{print $1}')
+
+for repo in "${repos[@]}"; do
+    repo_name="${repo##*/}"
+    if [[ ! "${repo_name}" =~ $repo_regex ]]; then
+        continue
+    fi
+    if [[ -d "${repo_name}" ]]; then
+        echo "Directory ${repo_name} already exists"
+        continue
+    fi
+    echo "Cloning repo ${repo} ..."
+    gh repo clone "${repo}"
+    echo "Finished cloning repo ${repo}"
+    for _ in {0..3}; do
+        echo
+    done
+done
