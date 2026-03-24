@@ -12,4 +12,4 @@ if [[ $# -eq 1 ]]; then
     dir="${1}"
 fi
 
-rg -0 -l "^#!\s*/usr/bin/env\s+bash\b" "${dir}" | parallel -0 'shfmt -w {}'
+rg -0 -l "^#!\s*/usr/bin/env\s+bash\b" "${dir}" | parallel -0 'shfmt -i 4 -w {}'
